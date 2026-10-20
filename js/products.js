@@ -296,9 +296,11 @@
 
   /* view: "front"(기본) | "back" | "detail" */
   function renderProductArt(product, colorIndex, view) {
-    // 관리자가 올린 사진이 있으면 사진 사용 (F-17)
-    const src = product.images && product.images[view || "front"];
-    if (src) {
+    // 사진이 있는 상품은 사진 사용 (F-17). 없는 각도(예: 뒷면 사진 없음)는 그리지 않고 빈 문자열
+    const imgs = product.images || {};
+    if (imgs.front) {
+      const src = imgs[view || "front"];
+      if (!src) return "";
       return '<img class="art art-photo' + (view === "back" ? " art-back" : "") + '" src="' + String(src).replace(/"/g, "&quot;") +
         '" alt="" loading="lazy" decoding="async">';
     }

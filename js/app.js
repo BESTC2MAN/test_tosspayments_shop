@@ -313,8 +313,11 @@
 
   function drawQvMedia(modal) {
     const p = qvState.product;
+    // 사진 상품은 있는 각도만 썸네일로 보여줌
+    const views = p.images && p.images.front ? VIEWS.filter(function (v) { return p.images[v[0]]; }) : VIEWS;
+    if (!views.some(function (v) { return v[0] === qvState.view; })) qvState.view = "front";
     $(".qv-art", modal).innerHTML = Shop.renderProductArt(p, qvState.color, qvState.view);
-    $(".qv-thumbs", modal).innerHTML = VIEWS.map(function (v) {
+    $(".qv-thumbs", modal).innerHTML = views.length < 2 ? "" : views.map(function (v) {
       return '<button class="qv-thumb" aria-label="' + v[1] + ' 보기" aria-pressed="' + (v[0] === qvState.view) + '" data-view="' + v[0] + '">' +
         Shop.renderProductArt(p, qvState.color, v[0]) + "</button>";
     }).join("");
@@ -493,7 +496,10 @@
 
       grid.innerHTML = list.map(function (p) {
         return '<article class="product-card" data-id="' + p.id + '" tabindex="0" aria-label="' + esc(p.name) + '">' +
-          '<div class="product-media">' + badgeHTML(p) + wishBtn(p) + Shop.renderProductArt(p, 0) + Shop.renderProductArt(p, 0, "back") +
+          (function () {
+            const back = Shop.renderProductArt(p, 0, "back");
+            return '<div class="product-media' + (back ? "" : " no-back") + '">' + badgeHTML(p) + wishBtn(p) + Shop.renderProductArt(p, 0) + back;
+          })() +
             '<button class="quick-add" data-quick>빠른 구매</button>' +
           "</div>" +
           '<div class="product-info">' +

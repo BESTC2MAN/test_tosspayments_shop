@@ -1081,3 +1081,7 @@ dialog.sheet::backdrop { background: rgba(0, 0, 0, .45); }
 .legal table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
 .legal th, .legal td { border: 1px solid var(--gray-200); padding: 8px; text-align: left; vertical-align: top; }
 .legal th { background: var(--gray-100); }
+
+/* 뒷면 사진이 없는 상품은 호버해도 앞면 유지 (살짝 확대만) */
+.product-card:hover .product-media.no-back .art { opacity: 1; }
+.product-media img.art-photo { background: var(--gray-100); }

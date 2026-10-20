@@ -52,8 +52,9 @@ powershell -ExecutionPolicy Bypass -File serve.ps1 -Port 3000
 - 상품은 `public.products`(색상 `colors` jsonb, `sizes`, `images`, `rating_avg`/`review_count`, `active`, `sort`)와 재고 `public.product_stock`(상품·색상인덱스·사이즈별 `qty`)에 있고, 관리자 화면에서 고칩니다. `fromRow()`가 화면용 객체로 바꾸며 축구복 설명 뒤에 비공식 안내 `NOTE`를 붙입니다.
 - `colors`는 축구복이면 `kit()` 옵션(`{name, body, stripe, sleeve, trim, collar, pattern, num}`), 바람막이면 `{name, hex}`입니다. 주문·재고·장바구니가 **색상 인덱스**로 연결되므로 기존 색상의 순서를 바꾸거나 지우지 않습니다(관리자 화면도 기존 색상 삭제를 막음).
 - 별점·리뷰 수는 `reviews` 트리거가 집계합니다. 리뷰가 없으면 별점을 숨깁니다.
-- `renderProductArt(product, colorIndex, view)`: `images[view]`(관리자가 Storage `product-images` 버킷에 올린 사진)가 있으면 `<img class="art">`, 없으면 SVG 일러스트(`jerseyArt()`/`windbreakerArt()`)를 그립니다. SVG는 `uid()`로 매번 새 id를 씁니다.
-- 축구복에는 실제 구단명을 상품명으로만 씁니다. 엠블럼, 스폰서·용품사 로고, "공식/레플리카" 표현은 쓰지 않고 비공식 데모 안내(`NOTE`, 푸터)를 유지합니다. 바람막이와 상점 브랜드는 가상 브랜드입니다.
+- `renderProductArt(product, colorIndex, view)`: `images.front`가 있으면 사진 상품으로 보고 `images[view]`를 `<img class="art">`로 그리며, 없는 각도는 빈 문자열을 돌려줍니다(목록 카드는 뒷면이 없으면 `.no-back`으로 호버 전환을 끄고, 퀵뷰는 있는 각도만 썸네일로 보여줌). 사진이 없으면 SVG 일러스트(`jerseyArt()`/`windbreakerArt()`, `uid()`로 매번 새 id)를 그립니다. 사진은 색상과 상관없이 한 장이라 색상 칩을 바꿔도 사진은 그대로입니다.
+- 현재 상품 사진은 Unsplash 무료 사진 핫링크입니다(`20261020100800_product_photos.sql`, `front`는 4:5 크롭, `detail`은 같은 사진의 2배 확대 크롭). 관리자 페이지에서 올리면 Storage(`product-images`) 주소로 바뀝니다. 리버풀(빨간 유니폼 선수들)과 아틀레티코(경기장)는 Unsplash에 유니폼 단독 사진이 없어 대체 사진입니다.
+- 축구복 사진은 사용자 결정으로 실제 구단 유니폼 사진(엠블럼·스폰서 로고 포함)을 씁니다. 상표권 위험이 있으므로 비공식 데모 안내(`NOTE`, 푸터)를 유지하고, 실제 판매 전에는 직접 촬영한 사진으로 바꿉니다. "공식/레플리카" 표현은 쓰지 않습니다. 바람막이와 상점 브랜드는 가상 브랜드라 로고가 보이지 않는 사진만 씁니다.
 - 히어로·기획전·마킹 배너 사진은 Unsplash 핫링크입니다.
 
 ### 상태 저장
