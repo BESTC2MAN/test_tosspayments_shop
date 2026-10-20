@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>바지 | RIDGELINE</title>
+  <meta name="description" content="RIDGELINE 아웃도어 — 등산바지, 카고, 방수바지, 조거">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-category="pants">
+
+  <div class="promo-bar">
+    <strong>FREE SHIPPING</strong> 7만원 이상 구매 시 무료배송 <a href="#">자세히 보기</a>
+  </div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <button class="icon-btn menu-toggle" aria-label="메뉴 열기" aria-expanded="false" aria-controls="main-nav">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <a href="clothing.html" class="logo" aria-label="RIDGELINE 홈">
+        <svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" fill="#111"/><path d="M6 31L17 12l6 10 4-6 7 15z" fill="#fff"/><path d="M17 12l3 5-3-1-2 2z" fill="#111"/></svg>
+        Ridgeline
+      </a>
+      <nav class="main-nav" id="main-nav" aria-label="주요 카테고리">
+        <ul>
+          <li><a href="clothing.html">Clothing<span class="ko">옷</span></a></li>
+          <li><a href="shoes.html">Footwear<span class="ko">신발</span></a></li>
+          <li><a href="pants.html" aria-current="page">Pants<span class="ko">바지</span></a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-btn" aria-label="검색">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+        </button>
+        <button class="icon-btn" aria-label="장바구니 열기" data-open-cart>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8h14l-1 13H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+          <span class="cart-count" data-empty="true">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <svg class="hero-bg" viewBox="0 0 1440 520" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f3326"/><stop offset="1" stop-color="#5d7a5f"/></linearGradient>
+          <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".75"/><stop offset=".6" stop-color="#000" stop-opacity=".1"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient>
+        </defs>
+        <rect width="1440" height="520" fill="url(#sky)"/>
+        <path d="M0 400L220 230l140 90 210-210 170 160 120-80 260 190 160-110 160 130V520H0z" fill="#2c3846"/>
+        <path d="M570 110l-60 60 40-10 30 30 30-40 40 20z" fill="#e9eef3" opacity=".9"/>
+        <path d="M0 460l300-140 220 110 260-170 300 200 220-90 140 70V520H0z" fill="#161d26"/>
+        <rect width="1440" height="520" fill="url(#fade)"/>
+      </svg>
+      <div class="container hero-inner">
+        <p class="eyebrow">FW 2026 · Pants</p>
+        <h1 id="hero-title">Move without limits</h1>
+        <p>4방향 스트레치부터 3레이어 방수까지. 산과 도시를 오가는 기능성 팬츠.</p>
+        <div class="hero-cta">
+          <a href="#listing" class="btn btn-light">컬렉션 보기</a>
+          <a href="shoes.html" class="btn btn-ghost-light">신발 보러가기</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="cat-strip">
+      <div class="container cat-strip-inner" id="sub-filters" role="toolbar" aria-label="세부 카테고리"></div>
+    </div>
+
+    <section class="listing" id="listing">
+      <div class="container">
+        <div class="listing-head">
+          <div>
+            <h2>Pants</h2>
+            <p class="count" id="result-count"></p>
+          </div>
+          <label>
+            <span class="sr-only">정렬</span>
+            <select class="sort-select" id="sort">
+              <option value="recommend">추천순</option>
+              <option value="new">신상품순</option>
+              <option value="sale">할인상품순</option>
+              <option value="low">낮은 가격순</option>
+              <option value="high">높은 가격순</option>
+            </select>
+          </label>
+        </div>
+        <div class="product-grid" id="product-grid"></div>
+      </div>
+    </section>
+
+    <section class="feature-band" aria-label="쇼핑 혜택">
+      <div class="container feature-grid">
+        <div class="feature">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9h17v14H3zM20 14h5l4 5v4h-9"/><circle cx="9" cy="24" r="2.5"/><circle cx="24" cy="24" r="2.5"/></svg>
+          <h4>Free Shipping</h4><p>7만원 이상 무료배송</p>
+        </div>
+        <div class="feature">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 12a10 10 0 1 1 0 8"/><path d="M3 8v5h5"/></svg>
+          <h4>Free Returns</h4><p>30일 이내 무료 반품</p>
+        </div>
+        <div class="feature">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3l11 4v8c0 7-5 12-11 14C10 27 5 22 5 15V7z"/><path d="M11 16l4 4 7-8"/></svg>
+          <h4>Lifetime Warranty</h4><p>제조 결함 평생 수선</p>
+        </div>
+        <div class="feature">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="26" height="18" rx="2"/><path d="M3 13h26"/></svg>
+          <h4>Secure Payment</h4><p>토스페이먼츠 안전결제</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div>
+          <a href="clothing.html" class="logo">
+            <svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" fill="#fff"/><path d="M6 31L17 12l6 10 4-6 7 15z" fill="#111"/></svg>
+            Ridgeline
+          </a>
+          <p>Never stop climbing.<br>더 높은 곳을 향한 아웃도어 장비.</p>
+        </div>
+        <div>
+          <h5>Shop</h5>
+          <ul><li><a href="clothing.html">옷</a></li><li><a href="shoes.html">신발</a></li><li><a href="pants.html">바지</a></li></ul>
+        </div>
+        <div>
+          <h5>Help</h5>
+          <ul><li><a href="#">주문 / 배송 조회</a></li><li><a href="#">교환 · 반품</a></li><li><a href="#">사이즈 가이드</a></li></ul>
+        </div>
+        <div>
+          <h5>Company</h5>
+          <ul><li><a href="#">브랜드 스토리</a></li><li><a href="#">이용약관</a></li><li><a href="#"><strong>개인정보처리방침</strong></a></li></ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>(주)릿지라인 · 대표 홍길동 · 사업자등록번호 000-00-00000 · 통신판매업 0000-서울-0000</span>
+        <span>© 2026 RIDGELINE. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Layers -->
+  <div class="overlay" aria-hidden="true"></div>
+
+  <aside class="drawer" id="cart-drawer" aria-label="장바구니" aria-hidden="true" role="dialog">
+    <div class="drawer-head">
+      <h3>Cart</h3>
+      <button class="icon-btn" aria-label="닫기" data-close-layer>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="drawer-body"></div>
+    <div class="drawer-foot" hidden>
+      <div class="drawer-total"><span>결제 예정 금액</span><span class="amt">0원</span></div>
+      <p class="drawer-note"></p>
+      <a href="checkout.html" class="btn btn-primary btn-block">주문하기</a>
+    </div>
+  </aside>
+
+  <div class="modal" id="quick-view" role="dialog" aria-modal="true" aria-labelledby="qv-title" aria-hidden="true">
+    <button class="icon-btn modal-close" aria-label="닫기" data-close-layer>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div class="qv-content"></div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

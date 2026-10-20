@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>결제 실패 | RIDGELINE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="fail">
+
+  <header class="site-header checkout-header">
+    <div class="container header-inner">
+      <a href="clothing.html" class="logo" aria-label="RIDGELINE 홈">
+        <svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" fill="#111"/><path d="M6 31L17 12l6 10 4-6 7 15z" fill="#fff"/><path d="M17 12l3 5-3-1-2 2z" fill="#111"/></svg>
+        Ridgeline
+      </a>
+      <span class="secure-tag">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        안전결제
+      </span>
+    </div>
+  </header>
+
+  <main class="result">
+    <div class="container">
+      <div class="result-card">
+        <div class="result-icon"><svg viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="34" fill="#e2231a"/><path d="M25 25l22 22M47 25L25 47" stroke="#fff" stroke-width="5" stroke-linecap="round"/></svg></div>
+        <h1 id="result-title">&nbsp;</h1>
+        <p class="lead" id="result-lead">&nbsp;</p>
+        <dl class="result-table" id="result-table"></dl>
+        <div class="result-actions">
+          <a href="checkout.html" class="btn btn-primary">다시 결제하기</a>
+          <a href="clothing.html" class="btn btn-outline">쇼핑 계속하기</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/result.js"></script>
+</body>
+</html>

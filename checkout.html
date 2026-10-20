@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>주문 / 결제 | RIDGELINE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- 토스페이먼츠 결제위젯 SDK v2 -->
+  <script src="https://js.tosspayments.com/v2/standard"></script>
+</head>
+<body>
+
+  <header class="site-header checkout-header">
+    <div class="container header-inner">
+      <a href="clothing.html" class="logo" aria-label="RIDGELINE 홈">
+        <svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" fill="#111"/><path d="M6 31L17 12l6 10 4-6 7 15z" fill="#fff"/><path d="M17 12l3 5-3-1-2 2z" fill="#111"/></svg>
+        Ridgeline
+      </a>
+      <span class="secure-tag">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        안전결제
+      </span>
+    </div>
+  </header>
+
+  <main class="checkout">
+    <div class="container">
+      <ol class="steps" aria-label="주문 단계">
+        <li>01 Cart</li><li class="on" aria-current="step">02 Checkout</li><li>03 Complete</li>
+      </ol>
+      <h1>Checkout</h1>
+
+      <div id="env-warning"></div>
+
+      <div id="checkout-empty" class="cart-empty" hidden>
+        <p>장바구니에 담긴 상품이 없습니다.</p>
+        <a href="clothing.html" class="btn btn-primary">쇼핑하러 가기</a>
+      </div>
+
+      <div class="checkout-grid" id="checkout-main" hidden>
+        <div>
+          <div class="test-banner" role="note">
+            <span aria-hidden="true">⚠</span>
+            <span><strong>테스트 결제 환경</strong> — 토스페이먼츠 테스트 키로 연동되어 있어 실제 출금이 발생하지 않습니다.</span>
+          </div>
+
+          <section class="panel" aria-labelledby="orderer-h">
+            <h2 id="orderer-h">주문자 / 배송 정보</h2>
+            <form id="order-form" class="form-grid" novalidate>
+              <div class="field">
+                <label for="f-name">이름 <span class="req">*</span></label>
+                <input id="f-name" name="name" autocomplete="name" required>
+                <p class="hint"></p>
+              </div>
+              <div class="field">
+                <label for="f-phone">휴대폰 번호 <span class="req">*</span></label>
+                <input id="f-phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="01012345678" required>
+                <p class="hint"></p>
+              </div>
+              <div class="field full">
+                <label for="f-email">이메일 <span class="req">*</span></label>
+                <input id="f-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+                <p class="hint"></p>
+              </div>
+              <div class="field full">
+                <label for="f-addr">주소 <span class="req">*</span></label>
+                <input id="f-addr" name="address" autocomplete="street-address" placeholder="도로명 주소" required>
+                <p class="hint"></p>
+              </div>
+              <div class="field full">
+                <label for="f-addr2">상세 주소</label>
+                <input id="f-addr2" name="address2" autocomplete="address-line2">
+                <p class="hint"></p>
+              </div>
+              <div class="field full">
+                <label for="f-memo">배송 메모</label>
+                <input id="f-memo" name="memo" placeholder="예) 문 앞에 놓아주세요">
+              </div>
+            </form>
+          </section>
+
+          <section class="panel" aria-labelledby="pay-h">
+            <h2 id="pay-h">결제 수단 <small>토스페이먼츠</small></h2>
+            <!-- 결제위젯: 결제 수단 -->
+            <div id="payment-method"></div>
+            <!-- 결제위젯: 약관 동의 -->
+            <div id="agreement"></div>
+          </section>
+        </div>
+
+        <aside class="summary" aria-labelledby="summary-h">
+          <h2 id="summary-h">Order Summary</h2>
+          <div class="summary-items" id="summary-items"></div>
+          <div class="summary-row"><span>상품 금액</span><span id="sum-subtotal">0원</span></div>
+          <div class="summary-row"><span>할인 적용</span><span id="sum-discount">0원</span></div>
+          <div class="summary-row"><span>배송비</span><span id="sum-shipping">0원</span></div>
+          <div class="summary-row total"><span>최종 결제 금액</span><span class="amt" id="sum-total">0원</span></div>
+          <button class="btn btn-primary btn-block" id="pay-button" disabled>결제 준비 중…</button>
+          <p class="summary-note">주문 내용을 확인했으며 결제에 동의합니다.</p>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/checkout.js"></script>
+</body>
+</html>
