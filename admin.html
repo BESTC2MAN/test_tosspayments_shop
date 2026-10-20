@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>관리자 | RIDGELINE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header admin-bar">
+    <div class="container header-inner">
+      <a href="admin.html" class="logo" aria-label="RIDGELINE 관리자">
+        <svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" fill="#fff"/><path d="M6 31L17 12l6 10 4-6 7 15z" fill="#111"/></svg>
+        Admin
+      </a>
+      <div class="admin-user">
+        <span id="admin-email"></span>
+        <a href="jerseys.html">쇼핑몰</a>
+        <button type="button" id="admin-logout">로그아웃</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <p class="empty-box" id="admin-loading">불러오는 중…</p>
+
+      <div id="no-access" hidden class="page-narrow">
+        <h1>No Access</h1>
+        <p class="page-lead">이 계정(<strong id="no-access-email"></strong>)은 관리자 권한이 없습니다.
+          관리자 지정은 Supabase에서 <code>profiles.role</code> 을 <code>admin</code> 으로 바꾸면 됩니다.</p>
+        <a class="btn btn-primary" href="jerseys.html">쇼핑몰로 가기</a>
+      </div>
+
+      <div id="admin-main" hidden>
+        <div class="tabs" role="tablist">
+          <button role="tab" data-tab="dash" aria-selected="true">대시보드</button>
+          <button role="tab" data-tab="orders" aria-selected="false">주문</button>
+          <button role="tab" data-tab="products" aria-selected="false">상품·재고</button>
+          <button role="tab" data-tab="coupons" aria-selected="false">쿠폰</button>
+        </div>
+
+        <!-- 대시보드 -->
+        <section id="tab-dash" role="tabpanel">
+          <div class="stat-grid" id="stats"></div>
+          <h2 class="section-title">최근 주문</h2>
+          <div class="table-wrap"><table class="data-table" id="recent-table"></table></div>
+        </section>
+
+        <!-- 주문 -->
+        <section id="tab-orders" role="tabpanel" hidden>
+          <form class="filters" id="order-filters">
+            <select name="status" aria-label="상태">
+              <option value="">전체 상태</option>
+              <option value="paid">결제 완료 이후 전체</option>
+              <option value="waiting_deposit">입금 대기</option>
+              <option value="confirmed">결제 완료</option>
+              <option value="preparing">배송 준비</option>
+              <option value="shipping">배송 중</option>
+              <option value="delivered">배송 완료</option>
+              <option value="partial_canceled">부분 취소</option>
+              <option value="canceled">취소됨</option>
+              <option value="failed">결제 실패</option>
+              <option value="pending">결제 대기</option>
+              <option value="expired">만료</option>
+            </select>
+            <input type="date" name="from" aria-label="시작일">
+            <input type="date" name="to" aria-label="종료일">
+            <input type="search" name="q" placeholder="주문번호 · 이름 · 휴대폰" aria-label="검색어">
+            <button class="btn btn-primary btn-sm" type="submit">검색</button>
+          </form>
+          <p class="count" id="order-count" style="font-size:13px;color:var(--gray-500);margin-bottom:8px"></p>
+          <div class="table-wrap"><table class="data-table" id="orders-table"></table></div>
+        </section>
+
+        <!-- 상품 -->
+        <section id="tab-products" role="tabpanel" hidden>
+          <div class="filters">
+            <button class="btn btn-primary btn-sm" type="button" id="new-product">새 상품 등록</button>
+          </div>
+          <div class="table-wrap"><table class="data-table" id="products-table"></table></div>
+        </section>
+
+        <!-- 쿠폰 -->
+        <section id="tab-coupons" role="tabpanel" hidden>
+          <form class="form-grid" id="coupon-form" style="margin-bottom:28px" novalidate>
+            <div class="field"><label for="c-code">쿠폰 코드</label><input id="c-code" name="code" placeholder="SUMMER10" required></div>
+            <div class="field"><label for="c-name">이름</label><input id="c-name" name="name" placeholder="여름 10% 할인" required></div>
+            <div class="field"><label for="c-kind">할인 방식</label>
+              <select id="c-kind" name="kind"><option value="percent">정률(%)</option><option value="amount">정액(원)</option></select></div>
+            <div class="field"><label for="c-value">할인 값</label><input id="c-value" name="value" type="number" min="1" required></div>
+            <div class="field"><label for="c-min">최소 주문 금액(원)</label><input id="c-min" name="min_order" type="number" min="0" value="0"></div>
+            <div class="field"><label for="c-max">최대 할인(원, 정률만)</label><input id="c-max" name="max_discount" type="number" min="0"></div>
+            <div class="field"><label for="c-start">시작일</label><input id="c-start" name="starts_at" type="date"></div>
+            <div class="field"><label for="c-end">종료일</label><input id="c-end" name="ends_at" type="date"></div>
+            <div class="field"><label for="c-limit">전체 사용 횟수 제한</label><input id="c-limit" name="usage_limit" type="number" min="1" placeholder="비우면 무제한"></div>
+            <div class="field full"><button class="btn btn-primary" type="submit">쿠폰 만들기</button><p class="form-msg" id="coupon-form-msg"></p></div>
+          </form>
+          <div class="table-wrap"><table class="data-table" id="coupons-table"></table></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <dialog class="sheet" id="order-dialog"></dialog>
+  <dialog class="sheet" id="product-dialog"></dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/order-view.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

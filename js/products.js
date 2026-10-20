@@ -317,6 +317,7 @@
   global.Shop.renderProductArt = renderProductArt;
   global.Shop.findProduct = findProduct;
   global.Shop.setProducts = setProducts;
+  global.Shop.fromRow = fromRow;
   global.Shop.stockOf = stockOf;
   global.Shop.isSoldOutAll = isSoldOutAll;
   global.Shop.kit = kit;
