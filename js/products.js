@@ -21,47 +21,53 @@
     brown:  { name: "브라운",     hex: "#6b4a32" },
   };
 
+  // 축구 저지 컬러웨이: body(몸판), stripe(세로 줄무늬), sleeve(소매), trim(칼라·소매 끝)
+  function kit(name, body, o) {
+    o = o || {};
+    return {
+      name: name,
+      hex: body,
+      body: body,
+      stripe: o.stripe || null,
+      sleeve: o.sleeve || null,
+      trim: o.trim || (isLight(body) ? "#1b1b1b" : "#ffffff"),
+      swatch: o.stripe ? "linear-gradient(90deg," + body + " 50%," + o.stripe + " 50%)" : null,
+    };
+  }
+
   const CATEGORIES = {
-    clothing: { key: "clothing", en: "Clothing", ko: "옷",   page: "clothing.html" },
-    shoes:    { key: "shoes",    en: "Footwear", ko: "신발", page: "shoes.html" },
-    pants:    { key: "pants",    en: "Pants",    ko: "바지", page: "pants.html" },
+    jersey:      { key: "jersey",      en: "Football Kits", ko: "축구복", page: "jerseys.html" },
+    windbreaker: { key: "windbreaker", en: "Windbreakers",  ko: "바람막이", page: "windbreakers.html" },
   };
 
   const TOP_SIZES   = ["S", "M", "L", "XL", "XXL"];
-  const PANT_SIZES  = ["28", "30", "32", "34", "36"];
-  const SHOE_SIZES  = ["240", "250", "260", "270", "280", "290"];
+
+  // 구단명은 상품 구분용으로만 사용합니다. 비공식 데모 상품이며 엠블럼·스폰서 로고는 넣지 않습니다.
+  const NOTE = " 구단 공식 상품이 아닌 데모 상품으로, 엠블럼과 스폰서 로고는 들어가지 않습니다.";
 
   const PRODUCTS = [
-    // ---------- 옷 ----------
-    { id: "CL-001", cat: "clothing", type: "jacket", sub: "패딩",     name: "서밋 레트로 다운 재킷", price: 359000, sale: 0,      badge: "best", colors: [C.black, C.yellow, C.red], sizes: TOP_SIZES, soldOut: ["XXL"], desc: "700 필파워 구스 다운을 채운 박스 핏 퍼퍼. 패커블 후드가 칼라에 수납됩니다." },
-    { id: "CL-002", cat: "clothing", type: "shell",  sub: "바람막이", name: "알파인 라이트 3L 쉘 재킷",   price: 489000, sale: 429000, badge: "sale", colors: [C.orange, C.navy, C.black], sizes: TOP_SIZES, desc: "3레이어 방수·투습 멤브레인. 헬멧 호환 후드와 피트 집 벤틸레이션." },
-    { id: "CL-003", cat: "clothing", type: "fleece", sub: "플리스",   name: "보레알 하이파일 플리스 재킷",     price: 229000, sale: 0,      badge: "new",  colors: [C.sand, C.black, C.green], sizes: TOP_SIZES, desc: "재활용 폴리에스터 하이파일 플리스. 어깨와 팔꿈치는 나일론 보강." },
-    { id: "CL-004", cat: "clothing", type: "jacket", sub: "패딩",     name: "하이 앨티튜드 익스페디션 파카",       price: 699000, sale: 0,      badge: "",     colors: [C.red, C.black], sizes: TOP_SIZES, desc: "극한 환경용 800 필파워 다운. 배플 구조와 스노우 스커트 적용." },
-    { id: "CL-005", cat: "clothing", type: "shell",  sub: "바람막이", name: "트레일 윈드 아노락",             price: 159000, sale: 119000, badge: "sale", colors: [C.blue, C.olive, C.yellow], sizes: TOP_SIZES, desc: "가볍고 바람을 막는 하프 집 아노락. 캥거루 포켓에 셀프 패커블." },
-    { id: "CL-006", cat: "clothing", type: "fleece", sub: "플리스",   name: "글래시어 1/4 집 플리스",         price: 99000,  sale: 0,      badge: "",     colors: [C.gray, C.navy, C.brown], sizes: TOP_SIZES, desc: "미드레이어로 좋은 마이크로 플리스. 일상과 산행 모두에 무난합니다." },
-    { id: "CL-007", cat: "clothing", type: "jacket", sub: "패딩",     name: "에코 써멀 경량 패딩",          price: 249000, sale: 0,      badge: "new",  colors: [C.green, C.black, C.white], sizes: TOP_SIZES, desc: "합성 충전재로 젖어도 보온력을 유지. 주머니에 수납되는 경량 패딩." },
-    { id: "CL-008", cat: "clothing", type: "shell",  sub: "바람막이", name: "릿지 쉘 2L 방수 재킷",  price: 329000, sale: 0,      badge: "best", colors: [C.yellow, C.black, C.navy], sizes: TOP_SIZES, soldOut: ["S"], desc: "아이코닉한 컬러 블로킹의 2레이어 방수 재킷. 내부 지퍼로 플리스 결합 가능." },
+    // ---------- 축구복: 프리미어리그 빅6 ----------
+    { id: "FK-MCI", cat: "jersey", sub: "프리미어리그", name: "맨체스터 시티 저지", price: 129000, sale: 0,     badge: "best", colors: [kit("홈", "#6cabdd"), kit("어웨이", "#1c2c5b", { trim: "#6cabdd" })], sizes: TOP_SIZES, desc: "스카이 블루 홈과 네이비 어웨이. 가벼운 흡습속건 메시 원단의 레귤러 핏." + NOTE },
+    { id: "FK-ARS", cat: "jersey", sub: "프리미어리그", name: "아스날 저지",         price: 129000, sale: 0,     badge: "new",  colors: [kit("홈", "#db0007", { sleeve: "#ffffff", trim: "#ffffff" }), kit("어웨이", "#f2c230", { trim: "#0b1e5b" })], sizes: TOP_SIZES, desc: "레드 몸판에 화이트 소매를 매치한 홈 컬러, 옐로 어웨이." + NOTE },
+    { id: "FK-LIV", cat: "jersey", sub: "프리미어리그", name: "리버풀 저지",         price: 129000, sale: 0,     badge: "best", colors: [kit("홈", "#c8102e"), kit("어웨이", "#f4f4f0", { trim: "#c8102e" })], sizes: TOP_SIZES, soldOut: ["S"], desc: "올 레드 홈과 화이트 어웨이. 통기 패널로 경기 중에도 시원합니다." + NOTE },
+    { id: "FK-MUN", cat: "jersey", sub: "프리미어리그", name: "맨체스터 유나이티드 저지", price: 129000, sale: 109000, badge: "sale", colors: [kit("홈", "#da291c", { trim: "#111111" }), kit("어웨이", "#f4f4f0", { trim: "#da291c" })], sizes: TOP_SIZES, desc: "블랙 칼라 포인트의 레드 홈, 화이트 어웨이." + NOTE },
+    { id: "FK-CHE", cat: "jersey", sub: "프리미어리그", name: "첼시 저지",           price: 129000, sale: 0,     badge: "",     colors: [kit("홈", "#034694"), kit("어웨이", "#f4f4f0", { trim: "#034694" })], sizes: TOP_SIZES, desc: "로열 블루 홈과 화이트 어웨이. 신축성 좋은 슬림 레귤러 핏." + NOTE },
+    { id: "FK-TOT", cat: "jersey", sub: "프리미어리그", name: "토트넘 홋스퍼 저지",   price: 129000, sale: 99000, badge: "sale", colors: [kit("홈", "#f4f4f0", { trim: "#132257" }), kit("어웨이", "#132257", { trim: "#f4f4f0" })], sizes: TOP_SIZES, desc: "네이비 트림의 화이트 홈, 네이비 어웨이." + NOTE },
 
-    // ---------- 신발 ----------
-    { id: "SH-001", cat: "shoes", type: "boot",    sub: "등산화",   name: "베어리지 미드 방수 하이킹 부츠", price: 239000, sale: 0,      badge: "best", colors: [C.brown, C.black], sizes: SHOE_SIZES, soldOut: ["290"], desc: "방수 멤브레인과 고무 러그 아웃솔. 발목을 안정적으로 잡아주는 미드컷." },
-    { id: "SH-002", cat: "shoes", type: "runner",  sub: "트레일러닝", name: "엔듀로 트레일 러너",   price: 189000, sale: 159000, badge: "sale", colors: [C.orange, C.black, C.blue], sizes: SHOE_SIZES, desc: "로커 지오메트리 미드솔로 추진력을 더한 장거리 트레일 러닝화." },
-    { id: "SH-003", cat: "shoes", type: "boot",    sub: "등산화",   name: "크레스트 GTX 백패킹 부츠",       price: 299000, sale: 0,      badge: "new",  colors: [C.gray, C.olive], sizes: SHOE_SIZES, desc: "무거운 짐을 진 장거리 산행용. TPU 섕크로 비틀림을 막아줍니다." },
-    { id: "SH-004", cat: "shoes", type: "mule",    sub: "윈터슈즈", name: "써멀 패딩 뮬",               price: 109000, sale: 0,      badge: "",     colors: [C.black, C.sand, C.red], sizes: SHOE_SIZES, desc: "캠핑장과 일상용 패딩 뮬. 미끄럼 방지 고무 아웃솔." },
-    { id: "SH-005", cat: "shoes", type: "runner",  sub: "트레일러닝", name: "플라이트 테크 레이스 쇼즈",     price: 249000, sale: 0,      badge: "",     colors: [C.white, C.yellow], sizes: SHOE_SIZES, desc: "카본 플레이트 내장 트레일 레이싱화. 가볍고 반발력이 뛰어납니다." },
-    { id: "SH-006", cat: "shoes", type: "boot",    sub: "윈터슈즈", name: "체나 스노우 부츠",               price: 199000, sale: 169000, badge: "sale", colors: [C.black, C.brown], sizes: SHOE_SIZES, soldOut: ["240"], desc: "200g 인슐레이션과 방수 가죽. 영하의 눈길에서도 따뜻하게." },
-    { id: "SH-007", cat: "shoes", type: "runner",  sub: "트레일러닝", name: "하이퍼 그립 어프로치 슈즈",     price: 169000, sale: 0,      badge: "new",  colors: [C.green, C.gray], sizes: SHOE_SIZES, desc: "바위 구간에 강한 스티키 러버 토캡. 등반 접근로 전용 설계." },
-    { id: "SH-008", cat: "shoes", type: "mule",    sub: "윈터슈즈", name: "퀼티드 다운 부티",                 price: 139000, sale: 0,      badge: "best", colors: [C.black, C.navy, C.white], sizes: SHOE_SIZES, desc: "퀼팅 다운 부티. 뒤꿈치를 접어 슬리퍼처럼 신을 수 있습니다." },
+    // ---------- 축구복: 라리가 ----------
+    { id: "FK-ATM", cat: "jersey", sub: "라리가", name: "아틀레티코 마드리드 저지", price: 129000, sale: 0, badge: "new",  colors: [kit("홈", "#cb3524", { stripe: "#f4f4f0", trim: "#1e2b4e" }), kit("어웨이", "#1e2b4e", { trim: "#cb3524" })], sizes: TOP_SIZES, desc: "레드·화이트 세로 줄무늬 홈과 네이비 어웨이." + NOTE },
+    { id: "FK-RMA", cat: "jersey", sub: "라리가", name: "레알 마드리드 저지",       price: 139000, sale: 0, badge: "best", colors: [kit("홈", "#f4f4f0", { trim: "#c9a227" }), kit("어웨이", "#1b2a4a", { trim: "#c9a227" })], sizes: TOP_SIZES, soldOut: ["M"], desc: "골드 트림의 올 화이트 홈, 네이비 어웨이." + NOTE },
+    { id: "FK-FCB", cat: "jersey", sub: "라리가", name: "FC 바르셀로나 저지",       price: 139000, sale: 0, badge: "best", colors: [kit("홈", "#a50044", { stripe: "#004d98", sleeve: "#004d98", trim: "#edbb00" }), kit("어웨이", "#edbb00", { trim: "#a50044" })], sizes: TOP_SIZES, desc: "블루·가넷 세로 줄무늬 홈과 골드 어웨이." + NOTE },
 
-    // ---------- 바지 ----------
-    { id: "PT-001", cat: "pants", type: "cargo",   sub: "카고",     name: "릿지 립스탑 카고 팬츠",          price: 149000, sale: 0,      badge: "best", colors: [C.olive, C.black, C.sand], sizes: PANT_SIZES, desc: "튼튼한 립스탑 원단과 대용량 사이드 포켓. 조절 가능한 밑단." },
-    { id: "PT-002", cat: "pants", type: "hiking",  sub: "등산바지", name: "트래버스 컨버터블 팬츠",       price: 129000, sale: 99000,  badge: "sale", colors: [C.gray, C.sand, C.black], sizes: PANT_SIZES, desc: "지퍼로 반바지 전환. 자외선 차단과 속건 기능." },
-    { id: "PT-003", cat: "pants", type: "shell",   sub: "방수바지", name: "알파인 3L 쉘 팬츠",              price: 359000, sale: 0,      badge: "new",  colors: [C.black, C.red], sizes: PANT_SIZES, soldOut: ["28"], desc: "풀 사이드 집으로 부츠를 신은 채 착용. 크램폰 가드 적용." },
-    { id: "PT-004", cat: "pants", type: "jogger",  sub: "조거",     name: "트레일 플리스 조거",             price: 89000,  sale: 0,      badge: "",     colors: [C.navy, C.gray, C.black], sizes: PANT_SIZES, desc: "기모 안감의 편안한 조거. 캠핑과 리커버리 웨어로 추천." },
-    { id: "PT-005", cat: "pants", type: "hiking",  sub: "등산바지", name: "익스플로러 스트레치 팬츠",       price: 139000, sale: 0,      badge: "best", colors: [C.black, C.navy, C.olive], sizes: PANT_SIZES, desc: "4방향 스트레치와 무릎 다트 패턴. 사계절 산행용 기본 바지." },
-    { id: "PT-006", cat: "pants", type: "cargo",   sub: "카고",     name: "유틸리티 와이드 카고",           price: 159000, sale: 129000, badge: "sale", colors: [C.sand, C.brown], sizes: PANT_SIZES, desc: "여유 있는 와이드 핏. 캔버스 질감의 내구성 높은 코튼 블렌드." },
-    { id: "PT-007", cat: "pants", type: "shell",   sub: "방수바지", name: "패커블 레인 팬츠",           price: 119000, sale: 0,      badge: "",     colors: [C.black, C.navy], sizes: PANT_SIZES, desc: "가볍게 챙기는 방수 오버 팬츠. 스터프 색 포함." },
-    { id: "PT-008", cat: "pants", type: "jogger",  sub: "조거",     name: "인슐레이티드 윈터 팬츠",       price: 199000, sale: 0,      badge: "new",  colors: [C.black, C.green], sizes: PANT_SIZES, desc: "보온 충전재를 넣은 겨울 조거. 발목 스냅으로 냉기 차단." },
+    // ---------- 바람막이 ----------
+    { id: "WB-001", cat: "windbreaker", type: "shell", sub: "트레이닝", name: "매치데이 트레이닝 윈드 재킷", price: 119000, sale: 0,     badge: "best", colors: [C.black, C.navy, C.red], sizes: TOP_SIZES, desc: "워밍업과 출퇴근 모두에 좋은 풀집 윈드 재킷. 메시 안감으로 땀이 차지 않습니다." },
+    { id: "WB-002", cat: "windbreaker", type: "shell", sub: "아노락",   name: "사이드라인 하프집 아노락",     price: 139000, sale: 109000, badge: "sale", colors: [C.blue, C.olive, C.yellow], sizes: TOP_SIZES, desc: "바람을 막는 하프집 아노락. 캥거루 포켓에 접어 넣을 수 있습니다." },
+    { id: "WB-003", cat: "windbreaker", type: "shell", sub: "경량",     name: "피치사이드 패커블 재킷",       price: 99000,  sale: 0,     badge: "new",  colors: [C.white, C.black, C.green], sizes: TOP_SIZES, desc: "150g대의 초경량 바람막이. 전용 파우치에 넣어 가방에 챙기기 좋습니다." },
+    { id: "WB-004", cat: "windbreaker", type: "shell", sub: "트레이닝", name: "드릴 탑 윈드브레이커",         price: 129000, sale: 0,     badge: "",     colors: [C.navy, C.gray, C.orange], sizes: TOP_SIZES, soldOut: ["XXL"], desc: "팔 움직임이 편한 래글런 소매의 트레이닝 탑. 밑단 스트링으로 바람 차단." },
+    { id: "WB-005", cat: "windbreaker", type: "shell", sub: "경량",     name: "올웨더 2L 쉘 재킷",           price: 189000, sale: 0,     badge: "best", colors: [C.yellow, C.black, C.navy], sizes: TOP_SIZES, desc: "가벼운 2레이어 방수 쉘. 비 오는 날 관전과 원정 응원에 추천합니다." },
+    { id: "WB-006", cat: "windbreaker", type: "shell", sub: "아노락",   name: "스톰 쉴드 오버헤드 아노락",   price: 159000, sale: 129000, badge: "sale", colors: [C.red, C.sand, C.black], sizes: TOP_SIZES, desc: "넉넉한 오버핏 아노락. 후드 조절 스트링과 사이드 지퍼로 입고 벗기 쉽습니다." },
   ];
+
 
   /* ---------- helpers ---------- */
   function shade(hex, amt) {
@@ -123,81 +129,43 @@
     return s;
   }
 
-  function pantsArt(type, hex) {
-    const dk = shade(hex, -36), lt = shade(hex, 22);
-    const trim = isLight(hex) ? "#3a3a3a" : "#111";
-    const wide = type === "cargo" ? 14 : 0;
-    const taper = type === "jogger" ? 12 : 0;
-    let extra = "";
-    if (type === "cargo") {
-      extra = '<rect x="104" y="250" width="44" height="58" rx="3" fill="' + dk + '"/><rect x="104" y="250" width="44" height="14" fill="' + shade(hex, -50) + '"/>' +
-              '<rect x="252" y="250" width="44" height="58" rx="3" fill="' + dk + '"/><rect x="252" y="250" width="44" height="14" fill="' + shade(hex, -50) + '"/>';
-    } else if (type === "shell") {
-      extra = '<path d="M118 140l-16 290M282 140l16 290" stroke="' + trim + '" stroke-width="4" stroke-dasharray="2 6"/>' +
-              '<path d="M108 330h80M212 330h80" stroke="' + lt + '" stroke-width="6" opacity=".5"/>';
-    } else if (type === "hiking") {
-      extra = '<path d="M112 300q38 10 76 0M212 300q38 10 76 0" fill="none" stroke="' + dk + '" stroke-width="3"/>' +
-              '<path d="M108 250h80M212 250h80" stroke="' + trim + '" stroke-width="3" stroke-dasharray="6 4"/>';
+  // 한 페이지에 여러 장이 그려지므로 clipPath id를 매번 다르게 만듭니다
+  let artSeq = 0;
+  function jerseyArt(k) {
+    const id = "jersey-clip-" + (++artSeq);
+    const body = "M132 128L172 112Q200 138 228 112L268 128L266 226L272 420H128L134 226Z";
+    const sleeve = k.sleeve || k.body;
+    const logo = k.stripe ? k.trim : (isLight(k.body) ? "#1b1b1b" : "#ffffff");
+    let stripes = "";
+    if (k.stripe) {
+      for (let x = 119; x < 280; x += 36) stripes += '<rect x="' + x + '" y="100" width="18" height="330" fill="' + k.stripe + '"/>';
     }
-    const cuff = type === "jogger"
-      ? '<path d="M' + (112 + taper) + ' 410h' + (72 - taper) + 'v24h-' + (72 - taper) + 'zM' + (216) + ' 410h' + (72 - taper) + 'v24h-' + (72 - taper) + 'z" fill="' + dk + '"/>'
-      : "";
     return wrap(
-      '<path d="M126 132h148l' + (16 + wide) + ' ' + (302) + 'h-' + (82 + wide - taper) + 'L200 200l-8 234h-' + (82 + wide - taper) + 'z" fill="' + hex + '"/>' +
-      '<rect x="124" y="104" width="152" height="30" fill="' + dk + '"/>' +
-      '<path d="M140 104v30M170 104v30M230 104v30M260 104v30" stroke="' + shade(hex, -60) + '" stroke-width="4"/>' +
-      '<path d="M200 134v62" stroke="' + dk + '" stroke-width="3"/>' +
-      '<path d="M136 150q22 22 46 8M264 150q-22 22-46 8" fill="none" stroke="' + dk + '" stroke-width="3"/>' +
-      extra + cuff +
-      '<g transform="translate(236 370)"><path d="M0 18L10 3l10 15z" fill="none" stroke="' + (isLight(hex) ? "#1b1b1b" : "#fff") + '" stroke-width="3" stroke-linejoin="round"/></g>'
-    );
-  }
-
-  function shoeArt(type, hex) {
-    const dk = shade(hex, -40), lt = shade(hex, 30);
-    const sole = isLight(hex) ? "#2b2b2b" : "#f2efe8";
-    const outsole = "#1c1c1c";
-    if (type === "mule") {
-      return wrap(
-        '<path d="M52 340h300q16 0 12 18l-4 14H58q-14 0-14-14z" fill="' + outsole + '"/>' +
-        '<path d="M56 312h292q14 0 14 16v14H48v-14q0-16 8-16z" fill="' + sole + '"/>' +
-        '<path d="M66 314q-4-52 40-84q70-48 150-20q60 22 96 104z" fill="' + hex + '"/>' +
-        '<g stroke="' + dk + '" stroke-width="4" fill="none" opacity=".8"><path d="M110 236q60 30 70 78"/><path d="M160 214q60 30 70 100"/><path d="M216 208q50 34 56 106"/></g>' +
-        '<g transform="translate(286 268)"><path d="M0 20L11 3l11 17z" fill="none" stroke="' + (isLight(hex) ? "#1b1b1b" : "#fff") + '" stroke-width="3" stroke-linejoin="round"/></g>'
-      );
-    }
-    const high = type === "boot";
-    const collarY = high ? 150 : 210;
-    return wrap(
-      // outsole
-      '<path d="M44 348h318q14 0 10 16l-6 16H56q-16 0-16-14z" fill="' + outsole + '"/>' +
-      '<path d="M60 380l10-12M90 380l10-12M120 380l10-12M150 380l10-12M180 380l10-12M210 380l10-12M240 380l10-12M270 380l10-12M300 380l10-12M330 380l10-12" stroke="#444" stroke-width="3"/>' +
-      // midsole
-      '<path d="M50 318h306q20 0 16 30H44q-4-30 6-30z" fill="' + sole + '"/>' +
-      // upper
-      '<path d="M56 320q-8-' + (high ? 120 : 70) + ' 30-' + (high ? 170 : 110) + 'h' + (high ? 70 : 64) + 'q14 ' + (high ? 70 : 34) + ' 54 ' + (high ? 100 : 70) + 'l120 46q34 14 30 64z" fill="' + hex + '"/>' +
-      // toe cap & heel
-      '<path d="M300 288q50 10 54 32H264q4-26 36-32z" fill="' + dk + '"/>' +
-      '<path d="M56 320q-8-50 8-96l30 8q-10 46 0 88z" fill="' + dk + '"/>' +
-      // collar
-      '<path d="M86 ' + collarY + 'h' + (high ? 70 : 64) + '" stroke="' + lt + '" stroke-width="10" stroke-linecap="round"/>' +
-      // tongue + laces
-      '<path d="M' + (high ? 156 : 150) + ' ' + (collarY - 6) + 'q30 ' + (high ? 40 : 20) + ' 50 ' + (high ? 100 : 66) + '" stroke="' + lt + '" stroke-width="16" fill="none" stroke-linecap="round"/>' +
-      '<g stroke="' + (isLight(hex) ? "#333" : "#f2f2f2") + '" stroke-width="5" stroke-linecap="round">' +
-        (high
-          ? '<path d="M150 176l26-6M158 200l28-6M168 224l28-6M182 246l28-6M198 266l28-6"/>'
-          : '<path d="M160 228l26-8M172 248l26-8M188 266l26-8M204 282l26-8"/>') +
+      '<defs><clipPath id="' + id + '"><path d="' + body + '"/></clipPath></defs>' +
+      // back collar (inside)
+      '<path d="M172 112Q200 98 228 112Q200 138 172 112z" fill="' + shade(k.body, -45) + '"/>' +
+      // sleeves + cuffs
+      '<path d="M134 128L62 170 82 252 136 230z" fill="' + sleeve + '"/>' +
+      '<path d="M266 128L338 170 318 252 264 230z" fill="' + sleeve + '"/>' +
+      '<path d="M62 170L82 252M338 170L318 252" stroke="' + k.trim + '" stroke-width="9"/>' +
+      // body + stripes + side shading
+      '<path d="' + body + '" fill="' + k.body + '"/>' +
+      '<g clip-path="url(#' + id + ')">' + stripes +
+        '<rect x="120" y="100" width="22" height="330" fill="#000" opacity=".08"/>' +
+        '<rect x="258" y="100" width="22" height="330" fill="#000" opacity=".08"/>' +
       "</g>" +
-      // logo
-      '<g transform="translate(96 ' + (high ? 250 : 268) + ')"><path d="M0 20L11 3l11 17z" fill="none" stroke="' + (isLight(hex) ? "#1b1b1b" : "#fff") + '" stroke-width="3.5" stroke-linejoin="round"/></g>' +
-      (type === "runner" ? '<path d="M110 300q90-40 170-6" stroke="' + lt + '" stroke-width="6" fill="none" opacity=".8"/>' : "")
+      // collar
+      '<path d="M172 112Q200 146 228 112" fill="none" stroke="' + k.trim + '" stroke-width="9" stroke-linecap="round"/>' +
+      // hem
+      '<path d="M128 412h144" stroke="' + shade(k.body, -30) + '" stroke-width="4" opacity=".6"/>' +
+      // maker logo (shop mark only, no club crest)
+      '<g transform="translate(228 172)"><path d="M0 20L11 3l11 17z" fill="none" stroke="' + logo + '" stroke-width="3.5" stroke-linejoin="round"/></g>'
     );
   }
 
   function renderProductArt(product, colorIndex) {
     const color = product.colors[colorIndex || 0] || product.colors[0];
-    if (product.cat === "shoes") return shoeArt(product.type, color.hex);
-    if (product.cat === "pants") return pantsArt(product.type, color.hex);
+    if (product.cat === "jersey") return jerseyArt(color);
     return topArt(product.type, color.hex);
   }
 

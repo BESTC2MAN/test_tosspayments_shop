@@ -20,7 +20,7 @@ try {
     $res = $ctx.Response
     try {
       $path = [Uri]::UnescapeDataString($ctx.Request.Url.AbsolutePath).TrimStart("/")
-      if ($path -eq "") { $path = "clothing.html" }
+      if ($path -eq "") { $path = "jerseys.html" }
       $file = [IO.Path]::GetFullPath((Join-Path $root $path))
       if ($file.StartsWith($root) -and (Test-Path -LiteralPath $file -PathType Leaf)) {
         $bytes = [IO.File]::ReadAllBytes($file)

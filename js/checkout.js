@@ -109,6 +109,19 @@
     } catch (e) { /* 저장 불가 환경 */ }
 
     btn.disabled = true;
+    btn.textContent = "주문 저장 중…";
+    // Supabase에 pending 주문 생성 (실패해도 결제는 진행)
+    if (window.ShopDB) {
+      await window.ShopDB.createOrder({
+        orderId: orderId,
+        orderName: orderName,
+        amount: amount,
+        customer: customer,
+        items: items.map(function (it) {
+          return { id: it.id, name: it.product.name, color: it.product.colors[it.color].name, size: it.size, qty: it.qty, line: it.line };
+        }),
+      });
+    }
     btn.textContent = "결제창 여는 중…";
     try {
       await widgets.requestPayment({

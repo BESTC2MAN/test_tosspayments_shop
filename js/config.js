@@ -18,4 +18,9 @@ window.SHOP_CONFIG = {
   // 비워두면 success 페이지에서 승인 요청 없이 결과만 표시합니다(퍼블리싱 단계).
   // 예: "/api/payments/confirm"
   CONFIRM_ENDPOINT: "",
+
+  // Supabase (주문 저장). publishable 키는 공개되어도 되는 키이며,
+  // 접근 범위는 DB의 RLS/함수 권한으로 제한됩니다. service_role 키는 절대 넣지 마세요.
+  SUPABASE_URL: "https://uvvyedkoyelpjrydzheh.supabase.co",
+  SUPABASE_KEY: "sb_publishable_FiTMSnZDIg_wnBMynGYV9Q_ScZHTUBI",
 };

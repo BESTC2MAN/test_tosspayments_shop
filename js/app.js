@@ -215,7 +215,7 @@
           '<div class="opt-group"><p class="opt-label">색상<span class="qv-color-name">' + esc(p.colors[0].name) + "</span></p>" +
             '<div class="color-opts" role="radiogroup" aria-label="색상">' +
               p.colors.map(function (c, i) {
-                return '<button class="color-opt" role="radio" aria-checked="' + (i === 0) + '" aria-label="' + esc(c.name) + '" data-color="' + i + '" style="background:' + c.hex + '"></button>';
+                return '<button class="color-opt" role="radio" aria-checked="' + (i === 0) + '" aria-label="' + esc(c.name) + '" data-color="' + i + '" style="background:' + (c.swatch || c.hex) + '"></button>';
               }).join("") +
             "</div></div>" +
           '<div class="opt-group"><p class="opt-label">사이즈</p>' +
@@ -321,7 +321,7 @@
             '<button class="quick-add" data-quick>빠른 구매</button>' +
           "</div>" +
           '<div class="product-info">' +
-            '<div class="swatches">' + p.colors.map(function (c) { return '<span class="swatch-dot" title="' + esc(c.name) + '" style="background:' + c.hex + '"></span>'; }).join("") + "</div>" +
+            '<div class="swatches">' + p.colors.map(function (c) { return '<span class="swatch-dot" title="' + esc(c.name) + '" style="background:' + (c.swatch || c.hex) + '"></span>'; }).join("") + "</div>" +
             '<h3 class="product-name">' + esc(p.name) + "</h3>" +
             '<p class="product-sub">' + esc(p.sub) + " · " + p.colors.length + "가지 색상</p>" +
             priceHTML(p) +

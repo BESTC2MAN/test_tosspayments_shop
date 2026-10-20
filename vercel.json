@@ -1,5 +1,5 @@
 {
   "redirects": [
-    { "source": "/", "destination": "/clothing.html", "permanent": false }
+    { "source": "/", "destination": "/jerseys.html", "permanent": false }
   ]
 }

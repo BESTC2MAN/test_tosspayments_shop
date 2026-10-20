@@ -88,6 +88,9 @@
       }
     }
 
+    // Supabase 주문 상태를 authorized 로 갱신 (금액이 일치하는 pending 주문만)
+    if (window.ShopDB) await window.ShopDB.markAuthorized(orderId, amount, paymentKey);
+
     Shop.Cart.clear();
     clearPending();
 
