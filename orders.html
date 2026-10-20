@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>주문 조회 | RIDGELINE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header checkout-header">
+    <div class="container header-inner">
+      <a href="jerseys.html" class="logo" aria-label="RIDGELINE 홈">
+        <svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" fill="#111"/><path d="M6 31L17 12l6 10 4-6 7 15z" fill="#fff"/><path d="M17 12l3 5-3-1-2 2z" fill="#111"/></svg>
+        Ridgeline
+      </a>
+      <div class="header-actions">
+        <a class="icon-btn" href="jerseys.html" aria-label="쇼핑하러 가기">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8h14l-1 13H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        </a>
+        <a class="icon-btn account-link" href="login.html" aria-label="로그인">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container page-mid">
+      <h1>Order Status</h1>
+      <p class="page-lead">주문번호와 주문할 때 입력한 휴대폰 번호(또는 이메일)로 주문 상태를 확인할 수 있어요.</p>
+
+      <form id="lookup-form" class="form-grid" novalidate>
+        <div class="field">
+          <label for="l-order">주문번호</label>
+          <input id="l-order" name="orderId" placeholder="RL-1234567890123-ABCDEFGH" autocomplete="off" required>
+        </div>
+        <div class="field">
+          <label for="l-contact">휴대폰 번호 또는 이메일</label>
+          <input id="l-contact" name="contact" placeholder="01012345678" autocomplete="tel" required>
+        </div>
+        <div class="full">
+          <button class="btn btn-primary" type="submit">주문 조회</button>
+          <p class="form-msg" id="lookup-msg" aria-live="polite"></p>
+        </div>
+      </form>
+
+      <div id="lookup-result" style="margin-top:24px"></div>
+      <p class="link-row" id="member-hint"><span>회원으로 주문하셨나요?</span><a href="account.html">마이페이지에서 전체 주문 보기</a></p>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/member.js"></script>
+  <script src="js/order-view.js"></script>
+  <script>
+    (function () {
+      "use strict";
+      const form = document.getElementById("lookup-form");
+      const msg = document.getElementById("lookup-msg");
+      const out = document.getElementById("lookup-result");
+      const q = new URLSearchParams(location.search);
+      if (q.get("orderId")) form.elements.orderId.value = q.get("orderId");
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const orderId = form.elements.orderId.value.trim();
+        const contact = form.elements.contact.value.trim();
+        if (!orderId || !contact) { msg.textContent = "주문번호와 연락처를 모두 입력해 주세요."; msg.className = "form-msg is-error"; return; }
+        msg.textContent = "조회 중…"; msg.className = "form-msg";
+        await Shop.ready;
+        const r = await ShopDB.lookupOrder(orderId, contact);
+        if (!r.ok) { msg.textContent = r.message; msg.className = "form-msg is-error"; out.innerHTML = ""; return; }
+        msg.textContent = "";
+        out.innerHTML = Shop.orderCardHTML(r.data);
+      });
+    })();
+  </script>
+</body>
+</html>
