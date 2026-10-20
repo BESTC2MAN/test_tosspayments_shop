@@ -1,33 +1,29 @@
 /* =========================================================
    결제 결과 페이지 (success.html / fail.html)
-   ---------------------------------------------------------
-   ※ 결제 승인(confirm)은 반드시 서버에서 시크릿 키로 호출해야 합니다.
-      SHOP_CONFIG.CONFIRM_ENDPOINT 를 지정하면 이 페이지가
-      { paymentKey, orderId, amount } 를 해당 서버로 POST 합니다.
-
-   서버 예시 (Node/Express):
-     app.post("/api/payments/confirm", async (req, res) => {
-       const { paymentKey, orderId, amount } = req.body;
-       // 1) DB의 주문 금액과 amount 가 같은지 반드시 검증
-       const auth = Buffer.from(process.env.TOSS_SECRET_KEY + ":").toString("base64");
-       const r = await fetch("https://api.tosspayments.com/v1/payments/confirm", {
-         method: "POST",
-         headers: { Authorization: "Basic " + auth, "Content-Type": "application/json" },
-         body: JSON.stringify({ paymentKey, orderId, amount }),
-       });
-       res.status(r.status).json(await r.json());
-     });
+   - 성공: 승인 서버(Supabase Edge Function payments-confirm)에
+     { paymentKey, orderId, amount } 를 보내 최종 확정합니다(F-01).
+     서버가 DB 주문 금액과 대조하고 재고를 차감한 뒤 토스 승인 API를 호출합니다.
+   - 실패: 주문을 "결제 실패"로 표시합니다(F-04).
    ========================================================= */
 (function () {
   "use strict";
 
   const Shop = window.Shop;
-  const CFG = window.SHOP_CONFIG;
+  const DB = window.ShopDB;
   const won = Shop.won;
   const esc = Shop.esc;
   const PENDING_KEY = "ridgeline_pending_order";
   const params = new URLSearchParams(location.search);
   const $ = function (s) { return document.querySelector(s); };
+
+  // 토스 은행 코드 → 은행 이름 (가상계좌 안내용)
+  const BANKS = {
+    "39": "경남은행", "34": "광주은행", "12": "단위농협", "32": "부산은행", "45": "새마을금고", "64": "산림조합",
+    "88": "신한은행", "48": "신협", "27": "씨티은행", "20": "우리은행", "71": "우체국", "50": "저축은행",
+    "37": "전북은행", "35": "제주은행", "90": "카카오뱅크", "89": "케이뱅크", "92": "토스뱅크", "81": "하나은행",
+    "54": "HSBC", "03": "IBK기업은행", "06": "KB국민은행", "31": "iM뱅크", "02": "KDB산업은행", "11": "NH농협은행",
+    "23": "SC제일은행", "07": "수협은행",
+  };
 
   function readPending() {
     try { return JSON.parse(sessionStorage.getItem(PENDING_KEY)); } catch (e) { return null; }
@@ -40,8 +36,14 @@
       return "<div><dt>" + esc(r[0]) + "</dt><dd>" + r[1] + "</dd></div>";
     }).join("");
   }
+  function fmtDate(s) {
+    if (!s) return "-";
+    const d = new Date(s);
+    return d.getFullYear() + "년 " + (d.getMonth() + 1) + "월 " + d.getDate() + "일 " +
+      String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+  }
 
-  document.addEventListener("DOMContentLoaded", function () {
+  Shop.onReady(function () {
     if (document.body.dataset.page === "success") handleSuccess();
     else handleFail();
   });
@@ -57,64 +59,57 @@
       showError("잘못된 접근입니다.", "결제 정보가 없습니다. 주문을 다시 진행해 주세요.");
       return;
     }
-    // 금액 위변조 1차 확인 (최종 검증은 서버에서)
-    if (pending && (pending.orderId !== orderId || pending.amount !== amount)) {
-      showError("결제 금액이 일치하지 않습니다.", "주문 정보와 결제 금액이 달라 결제를 진행하지 않았습니다.");
-      return;
-    }
 
-    let confirmed = false;
-    let confirmData = null;
-    if (CFG.CONFIRM_ENDPOINT) {
-      $("#result-title").textContent = "Processing";
-      $("#result-lead").textContent = "결제를 승인하는 중입니다…";
-      try {
-        const res = await fetch(CFG.CONFIRM_ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ paymentKey: paymentKey, orderId: orderId, amount: amount }),
-        });
-        confirmData = await res.json();
-        if (!res.ok) {
-          location.replace("fail.html?code=" + encodeURIComponent(confirmData.code || "CONFIRM_FAILED") +
-            "&message=" + encodeURIComponent(confirmData.message || "결제 승인에 실패했습니다.") +
-            "&orderId=" + encodeURIComponent(orderId));
-          return;
-        }
-        confirmed = true;
-      } catch (e) {
-        showError("결제 승인 요청 실패", "승인 서버에 연결하지 못했습니다. 잠시 후 다시 시도해 주세요.");
+    $("#result-title").textContent = "Processing";
+    $("#result-lead").textContent = "결제를 승인하는 중입니다…";
+
+    // 결제 인증 표시 → 최종 확정 (금액·재고 검증은 서버가 함)
+    await DB.markAuthorized(orderId, amount, paymentKey);
+    const r = await DB.confirmPayment({ paymentKey: paymentKey, orderId: orderId, amount: amount });
+    if (!r.ok) {
+      if (r.code === "NETWORK_ERROR" || r.code === "TOSS_UNREACHABLE" || r.code === "SERVER_ERROR") {
+        showError("결제 승인 대기", r.message);
+        $("#result-actions").innerHTML = '<button class="btn btn-primary" onclick="location.reload()">다시 시도</button>';
         return;
       }
+      location.replace("fail.html?code=" + encodeURIComponent(r.code) +
+        "&message=" + encodeURIComponent(r.message) + "&orderId=" + encodeURIComponent(orderId) + "&confirmed=1");
+      return;
     }
-
-    // Supabase 주문 상태를 authorized 로 갱신 (금액이 일치하는 pending 주문만)
-    if (window.ShopDB) await window.ShopDB.markAuthorized(orderId, amount, paymentKey);
 
     Shop.Cart.clear();
     clearPending();
 
-    $("#result-title").textContent = confirmed ? "Thank you" : "Payment Authorized";
-    $("#result-lead").innerHTML = confirmed
-      ? "주문이 완료되었습니다. 주문 내역은 이메일로 보내드립니다."
-      : "결제 인증이 완료되었습니다.<br>서버에서 결제 승인 API를 호출하면 주문이 최종 확정됩니다.";
+    const o = (r.data && r.data.order) || {};
+    const va = o.virtual_account;
+    const waiting = o.status === "waiting_deposit";
+
+    $("#result-title").textContent = waiting ? "Almost done" : "Thank you";
+    $("#result-lead").innerHTML = waiting
+      ? "주문이 접수되었습니다. 아래 계좌로 입금하시면 결제가 완료됩니다."
+      : "결제가 완료되었습니다. 주문해 주셔서 감사합니다.";
 
     const list = [
-      ["주문번호", esc(orderId)],
-      ["주문상품", esc(pending ? pending.orderName : "-")],
-      ["결제금액", won(amount)],
+      ["주문번호", "<strong class=\"order-no\">" + esc(orderId) + "</strong>"],
+      ["주문상품", esc(o.order_name || (pending && pending.orderName) || "-")],
     ];
-    if (pending && pending.customer) {
-      list.push(["주문자", esc(pending.customer.name) + " · " + esc(pending.customer.email)]);
-      list.push(["배송지", esc(pending.customer.address + (pending.customer.address2 ? " " + pending.customer.address2 : ""))]);
+    if (o.discount) list.push(["쿠폰 할인", "-" + won(o.discount)]);
+    list.push(["결제금액", won(o.amount || amount)]);
+    if (o.method) list.push(["결제수단", esc(o.method)]);
+    if (waiting && va) {
+      list.push(["입금 계좌", esc((BANKS[va.bankCode] || va.bankCode || "") + " " + (va.accountNumber || ""))]);
+      list.push(["예금주", esc(va.customerName || "RIDGELINE")]);
+      list.push(["입금 기한", esc(fmtDate(va.dueDate))]);
     }
-    if (confirmData && confirmData.method) list.push(["결제수단", esc(confirmData.method)]);
-    list.push(["paymentKey", '<code style="font-size:12px">' + esc(paymentKey) + "</code>"]);
+    if (o.customer_name) list.push(["주문자", esc(o.customer_name) + " · " + esc(o.customer_email || "")]);
+    if (o.address) list.push(["배송지", esc(o.address + (o.address2 ? " " + o.address2 : ""))]);
+    if (o.receipt_url) list.push(["영수증", '<a href="' + esc(o.receipt_url) + '" target="_blank" rel="noopener">영수증 보기</a>']);
     $("#result-table").innerHTML = rows(list);
 
-    if (!confirmed) {
-      $("#result-note").hidden = false;
-    }
+    // 비회원 주문 조회 안내 (F-06)
+    $("#result-note").hidden = false;
+    $("#result-note").innerHTML = '<span aria-hidden="true">i</span><span>주문번호를 꼭 메모해 두세요. ' +
+      '<a href="orders.html?orderId=' + encodeURIComponent(orderId) + '">주문 조회</a>에서 주문번호와 휴대폰 번호로 배송 상태를 확인할 수 있습니다.</span>';
   }
 
   function showError(title, msg) {
@@ -130,6 +125,9 @@
     const message = params.get("message") || "결제 중 문제가 발생했습니다.";
     const orderId = params.get("orderId");
     const canceled = code === "PAY_PROCESS_CANCELED" || code === "USER_CANCEL";
+
+    // 승인 서버가 이미 실패 처리한 경우가 아니면 여기서 실패로 표시
+    if (orderId && !params.get("confirmed")) DB.markFailed(orderId, code, message);
 
     $("#result-title").textContent = canceled ? "Canceled" : "Payment Failed";
     $("#result-lead").textContent = canceled

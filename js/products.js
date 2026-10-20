@@ -1,24 +1,11 @@
 /* =========================================================
-   상품 데이터 + 상품 일러스트(SVG)
-   실제 상품 사진이 생기면 image 필드를 추가하고
-   renderProductArt()에서 <img>를 반환하도록 바꾸면 됩니다.
+   상품 데이터(Supabase products / product_stock) + 상품 일러스트(SVG)
+   상품은 DB에서 불러와 setProducts()로 채웁니다(app.js).
+   관리자 화면에서 사진을 올리면 images.front/back/detail 사진을 쓰고,
+   없으면 SVG 일러스트를 그립니다.
    ========================================================= */
 (function (global) {
   "use strict";
-
-  const C = {
-    black:  { name: "블랙",       hex: "#1d1d1f" },
-    navy:   { name: "네이비",     hex: "#1f2a44" },
-    red:    { name: "레드",       hex: "#c8261d" },
-    yellow: { name: "볼트 옐로",  hex: "#e8c21a" },
-    olive:  { name: "올리브",     hex: "#5b6142" },
-    sand:   { name: "샌드",       hex: "#cbb892" },
-    gray:   { name: "그레이",     hex: "#8b8f94" },
-    white:  { name: "화이트",     hex: "#efefea" },
-    blue:   { name: "블루",       hex: "#2f6db5" },
-    green:  { name: "포레스트",   hex: "#2f5d46" },
-    orange: { name: "오렌지",     hex: "#e2622b" },
-  };
 
   /* 축구 저지 컬러웨이
      body 몸판 · stripe 세로 줄무늬 · sleeve 소매 · trim 칼라·소매 끝·사이드 라인
@@ -45,52 +32,57 @@
     windbreaker: { key: "windbreaker", en: "Windbreakers",  ko: "바람막이", page: "windbreakers.html" },
   };
 
-  const TOP_SIZES = ["S", "M", "L", "XL", "XXL"];
-
   // 구단명은 상품 구분용으로만 사용합니다. 비공식 데모 상품이며 엠블럼·스폰서 로고는 넣지 않습니다.
   const NOTE = " 구단 공식 상품이 아닌 데모 상품으로, 엠블럼과 스폰서 로고는 들어가지 않습니다.";
 
-  const PRODUCTS = [
-    // ---------- 축구복: 프리미어리그 빅6 ----------
-    { id: "FK-MCI", cat: "jersey", club: "MCI", clubShort: "맨시티", sub: "프리미어리그", name: "맨체스터 시티 저지", price: 129000, sale: 0, badge: "best", rating: 4.8, reviews: 1284,
-      colors: [kit("홈", "#6cabdd", { trim: "#ffffff", pattern: "tonal", num: "#1c2c5b" }), kit("어웨이", "#1c2c5b", { trim: "#6cabdd", collar: "v", pattern: "pin" })], sizes: TOP_SIZES,
-      desc: "스카이 블루 홈과 네이비 어웨이. 가벼운 흡습속건 메시 원단의 레귤러 핏." + NOTE },
-    { id: "FK-ARS", cat: "jersey", club: "ARS", clubShort: "아스날", sub: "프리미어리그", name: "아스날 저지", price: 129000, sale: 0, badge: "new", rating: 4.9, reviews: 962,
-      colors: [kit("홈", "#db0007", { sleeve: "#ffffff", trim: "#ffffff", num: "#ffffff" }), kit("어웨이", "#f2c230", { trim: "#0b1e5b", collar: "v", pattern: "tonal" })], sizes: TOP_SIZES,
-      desc: "레드 몸판에 화이트 소매를 매치한 홈 컬러, 옐로 어웨이." + NOTE },
-    { id: "FK-LIV", cat: "jersey", club: "LIV", clubShort: "리버풀", sub: "프리미어리그", name: "리버풀 저지", price: 129000, sale: 0, badge: "best", rating: 4.8, reviews: 1517,
-      colors: [kit("홈", "#c8102e", { trim: "#ffffff", pattern: "pin" }), kit("어웨이", "#f4f4f0", { trim: "#c8102e", collar: "v" })], sizes: TOP_SIZES, soldOut: ["S"],
-      desc: "올 레드 홈과 화이트 어웨이. 통기 패널로 경기 중에도 시원합니다." + NOTE },
-    { id: "FK-MUN", cat: "jersey", club: "MUN", clubShort: "맨유", sub: "프리미어리그", name: "맨체스터 유나이티드 저지", price: 129000, sale: 109000, badge: "sale", rating: 4.7, reviews: 1103,
-      colors: [kit("홈", "#da291c", { trim: "#111111", collar: "v", pattern: "tonal", num: "#ffffff" }), kit("어웨이", "#f4f4f0", { trim: "#da291c" })], sizes: TOP_SIZES,
-      desc: "블랙 칼라 포인트의 레드 홈, 화이트 어웨이." + NOTE },
-    { id: "FK-CHE", cat: "jersey", club: "CHE", clubShort: "첼시", sub: "프리미어리그", name: "첼시 저지", price: 129000, sale: 0, badge: "", rating: 4.6, reviews: 744,
-      colors: [kit("홈", "#034694", { trim: "#ffffff", pattern: "tonal" }), kit("어웨이", "#f4f4f0", { trim: "#034694", collar: "v", pattern: "hoop" })], sizes: TOP_SIZES,
-      desc: "로열 블루 홈과 화이트 어웨이. 신축성 좋은 슬림 레귤러 핏." + NOTE },
-    { id: "FK-TOT", cat: "jersey", club: "TOT", clubShort: "토트넘", sub: "프리미어리그", name: "토트넘 홋스퍼 저지", price: 129000, sale: 99000, badge: "sale", rating: 4.8, reviews: 2210,
-      colors: [kit("홈", "#f4f4f0", { trim: "#132257", pattern: "tonal" }), kit("어웨이", "#132257", { trim: "#f4f4f0", collar: "v", pattern: "pin" })], sizes: TOP_SIZES,
-      desc: "네이비 트림의 화이트 홈, 네이비 어웨이." + NOTE },
+  // DB에서 채워지는 상품 목록 (참조를 유지하도록 배열 내용만 바꿉니다)
+  const PRODUCTS = [];
 
-    // ---------- 축구복: 라리가 ----------
-    { id: "FK-ATM", cat: "jersey", club: "ATM", clubShort: "아틀레티코", sub: "라리가", name: "아틀레티코 마드리드 저지", price: 129000, sale: 0, badge: "new", rating: 4.7, reviews: 418,
-      colors: [kit("홈", "#cb3524", { stripe: "#f4f4f0", sleeve: "#cb3524", trim: "#1e2b4e", num: "#1e2b4e" }), kit("어웨이", "#1e2b4e", { trim: "#cb3524", collar: "v", pattern: "tonal" })], sizes: TOP_SIZES,
-      desc: "레드·화이트 세로 줄무늬 홈과 네이비 어웨이." + NOTE },
-    { id: "FK-RMA", cat: "jersey", club: "RMA", clubShort: "레알", sub: "라리가", name: "레알 마드리드 저지", price: 139000, sale: 0, badge: "best", rating: 4.9, reviews: 1876,
-      colors: [kit("홈", "#f4f4f0", { trim: "#c9a227", collar: "v", pattern: "tonal", num: "#1b2a4a" }), kit("어웨이", "#1b2a4a", { trim: "#c9a227", pattern: "pin" })], sizes: TOP_SIZES, soldOut: ["M"],
-      desc: "골드 트림의 올 화이트 홈, 네이비 어웨이." + NOTE },
-    { id: "FK-FCB", cat: "jersey", club: "FCB", clubShort: "바르샤", sub: "라리가", name: "FC 바르셀로나 저지", price: 139000, sale: 0, badge: "best", rating: 4.8, reviews: 1652,
-      colors: [kit("홈", "#a50044", { stripe: "#004d98", sleeve: "#004d98", trim: "#edbb00", num: "#edbb00" }), kit("어웨이", "#edbb00", { trim: "#a50044", collar: "v", pattern: "tonal" })], sizes: TOP_SIZES,
-      desc: "블루·가넷 세로 줄무늬 홈과 골드 어웨이." + NOTE },
+  /* DB 행 → 화면용 상품 객체
+     colors: 축구복은 kit() 옵션({name, body, stripe…}), 바람막이는 {name, hex}
+     stock: { "색상인덱스|사이즈": 수량 } */
+  function fromRow(row, stockRows) {
+    const stock = {};
+    (stockRows || []).forEach(function (s) { stock[s.color_index + "|" + s.size] = s.qty; });
+    const colors = (row.colors || []).map(function (c) {
+      return c.body ? kit(c.name, c.body, c) : { name: c.name, hex: c.hex || "#888888" };
+    });
+    return {
+      id: row.id,
+      cat: row.cat,
+      club: row.club || "",
+      clubShort: row.club_short || "",
+      sub: row.sub,
+      name: row.name,
+      price: row.price,
+      sale: row.sale || 0,
+      badge: row.badge || "",
+      type: row.type || "track",
+      desc: (row.description || "") + (row.cat === "jersey" ? NOTE : ""),
+      colors: colors,
+      sizes: row.sizes || [],
+      images: row.images || {},
+      rating: Number(row.rating_avg) || 0,
+      reviews: row.review_count || 0,
+      sort: row.sort || 0,
+      stock: stock,
+    };
+  }
 
-    // ---------- 바람막이 (type: track 풀집 트랙 · anorak 하프집 · packable 경량 후드 · shell 방수 후드) ----------
-    { id: "WB-001", cat: "windbreaker", type: "track",    sub: "트레이닝", name: "매치데이 트레이닝 윈드 재킷", price: 119000, sale: 0,      badge: "best", rating: 4.7, reviews: 538, colors: [C.black, C.navy, C.red], sizes: TOP_SIZES, desc: "워밍업과 출퇴근 모두에 좋은 풀집 윈드 재킷. 메시 안감으로 땀이 차지 않습니다." },
-    { id: "WB-002", cat: "windbreaker", type: "anorak",   sub: "아노락",   name: "사이드라인 하프집 아노락",     price: 139000, sale: 109000, badge: "sale", rating: 4.6, reviews: 302, colors: [C.blue, C.olive, C.yellow], sizes: TOP_SIZES, desc: "바람을 막는 하프집 아노락. 캥거루 포켓에 접어 넣을 수 있습니다." },
-    { id: "WB-003", cat: "windbreaker", type: "packable", sub: "경량",     name: "피치사이드 패커블 재킷",       price: 99000,  sale: 0,      badge: "new",  rating: 4.8, reviews: 211, colors: [C.white, C.black, C.green], sizes: TOP_SIZES, desc: "150g대의 초경량 바람막이. 전용 파우치에 넣어 가방에 챙기기 좋습니다." },
-    { id: "WB-004", cat: "windbreaker", type: "track",    sub: "트레이닝", name: "드릴 탑 윈드브레이커",         price: 129000, sale: 0,      badge: "",     rating: 4.5, reviews: 187, colors: [C.navy, C.gray, C.orange], sizes: TOP_SIZES, soldOut: ["XXL"], desc: "팔 움직임이 편한 래글런 소매의 트레이닝 탑. 밑단 스트링으로 바람 차단." },
-    { id: "WB-005", cat: "windbreaker", type: "shell",    sub: "경량",     name: "올웨더 2L 쉘 재킷",           price: 189000, sale: 0,      badge: "best", rating: 4.9, reviews: 655, colors: [C.yellow, C.black, C.navy], sizes: TOP_SIZES, desc: "가벼운 2레이어 방수 쉘. 비 오는 날 관전과 원정 응원에 추천합니다." },
-    { id: "WB-006", cat: "windbreaker", type: "anorak",   sub: "아노락",   name: "스톰 쉴드 오버헤드 아노락",   price: 159000, sale: 129000, badge: "sale", rating: 4.7, reviews: 344, colors: [C.red, C.sand, C.black], sizes: TOP_SIZES, desc: "넉넉한 오버핏 아노락. 후드 조절 스트링과 사이드 지퍼로 입고 벗기 쉽습니다." },
-  ];
+  function setProducts(rows) {
+    PRODUCTS.length = 0;
+    rows.forEach(function (r) { PRODUCTS.push(fromRow(r, r.product_stock)); });
+    PRODUCTS.sort(function (a, b) { return a.sort - b.sort; });
+  }
 
+  // 재고 수량: 재고 행이 없으면 0(판매 불가)
+  function stockOf(p, colorIndex, size) {
+    const n = p.stock[colorIndex + "|" + size];
+    return typeof n === "number" ? n : 0;
+  }
+  function isSoldOutAll(p) {
+    return !Object.keys(p.stock).some(function (k) { return p.stock[k] > 0; });
+  }
   /* ---------- helpers ---------- */
   function shade(hex, amt) {
     const n = parseInt(hex.slice(1), 16);
@@ -304,6 +296,12 @@
 
   /* view: "front"(기본) | "back" | "detail" */
   function renderProductArt(product, colorIndex, view) {
+    // 관리자가 올린 사진이 있으면 사진 사용 (F-17)
+    const src = product.images && product.images[view || "front"];
+    if (src) {
+      return '<img class="art art-photo' + (view === "back" ? " art-back" : "") + '" src="' + String(src).replace(/"/g, "&quot;") +
+        '" alt="" loading="lazy" decoding="async">';
+    }
     const color = product.colors[colorIndex || 0] || product.colors[0];
     if (product.cat === "jersey") return jerseyArt(color, view);
     return windbreakerArt(product.type, color.hex, view);
@@ -318,4 +316,8 @@
   global.Shop.CATEGORIES = CATEGORIES;
   global.Shop.renderProductArt = renderProductArt;
   global.Shop.findProduct = findProduct;
+  global.Shop.setProducts = setProducts;
+  global.Shop.stockOf = stockOf;
+  global.Shop.isSoldOutAll = isSoldOutAll;
+  global.Shop.kit = kit;
 })(window);

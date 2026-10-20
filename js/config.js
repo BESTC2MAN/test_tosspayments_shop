@@ -11,16 +11,15 @@ window.SHOP_CONFIG = {
   STORE_NAME: "RIDGELINE",
   TOSS_CLIENT_KEY: "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm",
 
+  // 화면 표시용. 실제 금액은 DB 함수(shop_shipping_fee)가 다시 계산하므로 바꿀 때는 두 곳을 함께 고칩니다.
   SHIPPING_FEE: 3000,
   FREE_SHIPPING_OVER: 70000,
 
-  // 결제 승인(confirm) API를 호출할 서버 엔드포인트.
-  // 비워두면 success 페이지에서 승인 요청 없이 결과만 표시합니다(퍼블리싱 단계).
-  // 예: "/api/payments/confirm"
-  CONFIRM_ENDPOINT: "",
-
-  // Supabase (주문 저장). publishable 키는 공개되어도 되는 키이며,
+  // Supabase. publishable 키는 공개되어도 되는 키이며,
   // 접근 범위는 DB의 RLS/함수 권한으로 제한됩니다. service_role 키는 절대 넣지 마세요.
   SUPABASE_URL: "https://uvvyedkoyelpjrydzheh.supabase.co",
   SUPABASE_KEY: "sb_publishable_FiTMSnZDIg_wnBMynGYV9Q_ScZHTUBI",
 };
+
+// 결제 승인(confirm) 서버: Supabase Edge Function (supabase/functions/payments-confirm)
+window.SHOP_CONFIG.CONFIRM_ENDPOINT = window.SHOP_CONFIG.SUPABASE_URL + "/functions/v1/payments-confirm";

@@ -47,8 +47,11 @@
             <span><strong>테스트 결제 환경</strong> — 토스페이먼츠 테스트 키로 연동되어 있어 실제 출금이 발생하지 않습니다.</span>
           </div>
 
+          <div class="test-banner warn-banner" id="stock-warning" role="alert" hidden></div>
+
           <section class="panel" aria-labelledby="orderer-h">
             <h2 id="orderer-h">주문자 / 배송 정보</h2>
+            <div id="member-box" class="member-box"></div>
             <form id="order-form" class="form-grid" novalidate>
               <div class="field">
                 <label for="f-name">이름 <span class="req">*</span></label>
@@ -79,6 +82,9 @@
                 <label for="f-memo">배송 메모</label>
                 <input id="f-memo" name="memo" placeholder="예) 문 앞에 놓아주세요">
               </div>
+              <label class="check-row full" id="save-address-row" hidden>
+                <input type="checkbox" id="save-address"> 이 배송지를 내 배송지 목록에 저장
+              </label>
             </form>
           </section>
 
@@ -96,6 +102,13 @@
           <div class="summary-items" id="summary-items"></div>
           <div class="summary-row"><span>상품 금액</span><span id="sum-subtotal">0원</span></div>
           <div class="summary-row"><span>할인 적용</span><span id="sum-discount">0원</span></div>
+          <div class="coupon">
+            <label for="coupon-code" class="sr-only">쿠폰 코드</label>
+            <input id="coupon-code" placeholder="쿠폰 코드" autocomplete="off" autocapitalize="characters">
+            <button type="button" class="btn btn-outline" id="coupon-apply">적용</button>
+          </div>
+          <p class="coupon-msg" id="coupon-msg" aria-live="polite"></p>
+          <div class="summary-row"><span>쿠폰 할인</span><span id="sum-coupon">0원</span></div>
           <div class="summary-row"><span>배송비</span><span id="sum-shipping">0원</span></div>
           <div class="summary-row total"><span>최종 결제 금액</span><span class="amt" id="sum-total">0원</span></div>
           <button class="btn btn-primary btn-block" id="pay-button" disabled>결제 준비 중…</button>
@@ -105,10 +118,12 @@
     </div>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
   <script src="js/config.js"></script>
   <script src="js/products.js"></script>
-  <script src="js/app.js"></script>
   <script src="js/db.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/member.js"></script>
   <script src="js/checkout.js"></script>
 </body>
 </html>
