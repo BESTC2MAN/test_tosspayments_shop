@@ -194,22 +194,36 @@
   }
 
   /* ---------- quick view modal ---------- */
-  const qvState = { product: null, color: 0, size: null };
+  const qvState = { product: null, color: 0, size: null, view: "front" };
+  const VIEWS = [["front", "앞면"], ["back", "뒷면"], ["detail", "디테일"]];
+
+  function drawQvMedia(modal) {
+    const p = qvState.product;
+    $(".qv-art", modal).innerHTML = Shop.renderProductArt(p, qvState.color, qvState.view);
+    $(".qv-thumbs", modal).innerHTML = VIEWS.map(function (v) {
+      return '<button class="qv-thumb" aria-label="' + v[1] + ' 보기" aria-pressed="' + (v[0] === qvState.view) + '" data-view="' + v[0] + '">' +
+        Shop.renderProductArt(p, qvState.color, v[0]) + "</button>";
+    }).join("");
+    $$(".qv-thumb", modal).forEach(function (b) {
+      b.addEventListener("click", function () { qvState.view = b.dataset.view; drawQvMedia(modal); });
+    });
+  }
 
   function openQuickView(id) {
     const p = Shop.findProduct(id);
     const modal = $("#quick-view");
     if (!p || !modal) return;
-    qvState.product = p; qvState.color = 0; qvState.size = null;
+    qvState.product = p; qvState.color = 0; qvState.size = null; qvState.view = "front";
     const cat = Shop.CATEGORIES[p.cat];
     const soldOut = p.soldOut || [];
 
     $(".qv-content", modal).innerHTML =
       '<div class="qv">' +
-        '<div class="qv-media">' + badgeHTML(p) + '<div class="qv-art">' + Shop.renderProductArt(p, 0) + "</div></div>" +
+        '<div class="qv-media">' + badgeHTML(p) + '<div class="qv-art"></div><div class="qv-thumbs"></div></div>' +
         '<div class="qv-body">' +
           '<p class="qv-cat">' + cat.en + " · " + esc(p.sub) + "</p>" +
           '<h2 class="qv-name" id="qv-title">' + esc(p.name) + "</h2>" +
+          ratingHTML(p) +
           priceHTML(p) +
           '<p class="qv-desc">' + esc(p.desc) + "</p>" +
           '<div class="opt-group"><p class="opt-label">색상<span class="qv-color-name">' + esc(p.colors[0].name) + "</span></p>" +
@@ -225,6 +239,11 @@
                 return '<button class="size-opt" role="radio" aria-checked="false" data-size="' + s + '"' + (so ? " disabled aria-label=\"" + s + " 품절\"" : "") + ">" + s + "</button>";
               }).join("") +
             "</div><p class=\"opt-error\" aria-live=\"polite\"></p></div>" +
+          '<ul class="qv-info">' +
+            "<li><strong>배송</strong>평일 14시 이전 주문 시 당일 출고 · " + won(CFG.FREE_SHIPPING_OVER) + " 이상 무료배송</li>" +
+            (p.cat === "jersey" ? "<li><strong>마킹</strong>이름·등번호 마킹은 준비 중입니다 (뒷면 이미지는 예시)</li>" : "<li><strong>소재</strong>나일론 100% · 발수 코팅</li>") +
+            "<li><strong>교환/반품</strong>수령 후 30일 이내 무료</li>" +
+          "</ul>" +
           '<div class="qv-actions">' +
             '<button class="btn btn-outline btn-block" data-qv-add>장바구니 담기</button>' +
             '<button class="btn btn-primary btn-block" data-qv-buy>바로 구매</button>' +
@@ -232,12 +251,13 @@
         "</div>" +
       "</div>";
 
+    drawQvMedia(modal);
     $$(".color-opt", modal).forEach(function (b) {
       b.addEventListener("click", function () {
         qvState.color = Number(b.dataset.color);
         $$(".color-opt", modal).forEach(function (x) { x.setAttribute("aria-checked", String(x === b)); });
         $(".qv-color-name", modal).textContent = p.colors[qvState.color].name;
-        $(".qv-art", modal).innerHTML = Shop.renderProductArt(p, qvState.color);
+        drawQvMedia(modal);
       });
     });
     $$(".size-opt", modal).forEach(function (b) {
@@ -273,6 +293,12 @@
     if (p.badge === "new") return '<span class="badge new">New</span>';
     if (p.badge === "best") return '<span class="badge">Best</span>';
     return "";
+  }
+  function ratingHTML(p) {
+    if (!p.rating) return "";
+    return '<p class="rating"><span class="stars" style="--r:' + p.rating + '" aria-hidden="true"></span>' +
+      '<span class="sr-only">별점 5점 만점에</span><strong>' + p.rating.toFixed(1) + "</strong>" +
+      '<span class="rv">리뷰 ' + p.reviews.toLocaleString("ko-KR") + "</span></p>";
   }
   function priceHTML(p) {
     if (p.sale) {
@@ -311,20 +337,22 @@
       if (state.sort === "high") list.sort(function (a, b) { return unitPrice(b) - unitPrice(a); });
       if (state.sort === "new") list.sort(function (a, b) { return (b.badge === "new") - (a.badge === "new"); });
       if (state.sort === "sale") list.sort(function (a, b) { return (b.sale ? 1 : 0) - (a.sale ? 1 : 0); });
+      if (state.sort === "review") list.sort(function (a, b) { return (b.reviews || 0) - (a.reviews || 0); });
 
       $("#result-count").textContent = "총 " + list.length + "개 상품";
       if (!list.length) { grid.innerHTML = '<p class="empty-state">조건에 맞는 상품이 없습니다.</p>'; return; }
 
       grid.innerHTML = list.map(function (p) {
         return '<article class="product-card" data-id="' + p.id + '" tabindex="0" aria-label="' + esc(p.name) + '">' +
-          '<div class="product-media">' + badgeHTML(p) + Shop.renderProductArt(p, 0) +
+          '<div class="product-media">' + badgeHTML(p) + Shop.renderProductArt(p, 0) + Shop.renderProductArt(p, 0, "back") +
             '<button class="quick-add" data-quick>빠른 구매</button>' +
           "</div>" +
           '<div class="product-info">' +
             '<div class="swatches">' + p.colors.map(function (c) { return '<span class="swatch-dot" title="' + esc(c.name) + '" style="background:' + (c.swatch || c.hex) + '"></span>'; }).join("") + "</div>" +
             '<h3 class="product-name">' + esc(p.name) + "</h3>" +
-            '<p class="product-sub">' + esc(p.sub) + " · " + p.colors.length + "가지 색상</p>" +
+            '<p class="product-sub">' + esc(p.sub) + " · " + p.colors.map(function (c) { return esc(c.name); }).join(" / ") + "</p>" +
             priceHTML(p) +
+            ratingHTML(p) +
           "</div>" +
         "</article>";
       }).join("");
@@ -338,9 +366,48 @@
     draw();
   }
 
+  /* ---------- hero slider ---------- */
+  function initHero() {
+    const slides = $$(".hero-slide");
+    const dots = $(".hero-dots");
+    if (slides.length < 2 || !dots) return;
+    let cur = 0, timer;
+    dots.innerHTML = slides.map(function (s, i) {
+      return '<button aria-label="' + (i + 1) + '번 배너" aria-pressed="' + (i === 0) + '"></button>';
+    }).join("");
+    const show = function (n) {
+      cur = (n + slides.length) % slides.length;
+      slides.forEach(function (s, i) { s.classList.toggle("is-active", i === cur); s.setAttribute("aria-hidden", String(i !== cur)); });
+      $$("button", dots).forEach(function (b, i) { b.setAttribute("aria-pressed", String(i === cur)); });
+    };
+    const play = function () { clearInterval(timer); timer = setInterval(function () { show(cur + 1); }, 6000); };
+    $$("button", dots).forEach(function (b, i) { b.addEventListener("click", function () { show(i); play(); }); });
+    show(0);
+    if (!global.matchMedia || !global.matchMedia("(prefers-reduced-motion: reduce)").matches) play();
+  }
+
+  /* ---------- club shortcuts ---------- */
+  function initClubs() {
+    const row = $("#club-row");
+    if (!row) return;
+    const clubs = Shop.PRODUCTS.filter(function (p) { return p.club; });
+    row.innerHTML = clubs.map(function (p) {
+      const k = p.colors[0];
+      const fill = k.stripe ? "repeating-linear-gradient(90deg," + k.body + " 0 8px," + k.stripe + " 8px 16px)" : k.body;
+      return '<button class="club" data-id="' + p.id + '">' +
+        '<span class="club-disc" style="background:' + fill + ";box-shadow:inset 0 0 0 4px " + k.trim + '"><span>' + esc(p.club) + "</span></span>" +
+        '<span class="club-name">' + esc(p.clubShort) + "</span></button>";
+    }).join("");
+    $$(".club", row).forEach(function (b) {
+      b.addEventListener("click", function () { openQuickView(b.dataset.id); });
+    });
+  }
+
   /* ---------- boot ---------- */
   document.addEventListener("DOMContentLoaded", function () {
     initHeader();
+    initHero();
+    initClubs();
     initListing();
   });
 

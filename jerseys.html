@@ -44,25 +44,53 @@
   </header>
 
   <main>
-    <section class="hero" aria-labelledby="hero-title">
-      <svg class="hero-bg" viewBox="0 0 1440 520" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-        <defs>
-          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d2a3a"/><stop offset="1" stop-color="#4a5b6e"/></linearGradient>
-          <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".75"/><stop offset=".6" stop-color="#000" stop-opacity=".1"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient>
-        </defs>
-        <rect width="1440" height="520" fill="#1f5a34"/>
-        <g fill="#256b3e"><rect x="0" width="120" height="520"/><rect x="240" width="120" height="520"/><rect x="480" width="120" height="520"/><rect x="720" width="120" height="520"/><rect x="960" width="120" height="520"/><rect x="1200" width="120" height="520"/></g>
-        <g fill="none" stroke="#e9f2ec" stroke-width="4" opacity=".55"><path d="M960 0v520"/><circle cx="960" cy="260" r="110"/><circle cx="960" cy="260" r="5" fill="#e9f2ec"/><path d="M1440 120h-190v280h190M1440 190h-70v140h70"/></g>
-        <rect width="1440" height="520" fill="url(#fade)"/>
-      </svg>
-      <div class="container hero-inner">
-        <p class="eyebrow">26/27 Season · Football Kits</p>
-        <h1 id="hero-title">Wear your colors</h1>
-        <p>프리미어리그 빅6와 라리가 세 구단의 컬러를 담은 홈·어웨이 저지 컬렉션.</p>
-        <div class="hero-cta">
-          <a href="#listing" class="btn btn-light">저지 보기</a>
-          <a href="windbreakers.html" class="btn btn-ghost-light">바람막이 보러가기</a>
+    <section class="hero hero-slider" aria-labelledby="hero-title" aria-roledescription="carousel">
+      <div class="hero-slide is-active">
+        <img class="hero-img" src="https://images.unsplash.com/photo-1706675780107-7c43cc487928?auto=format&fit=crop&q=75&w=1600" srcset="https://images.unsplash.com/photo-1706675780107-7c43cc487928?auto=format&fit=crop&q=75&w=800 800w, https://images.unsplash.com/photo-1706675780107-7c43cc487928?auto=format&fit=crop&q=75&w=1600 1600w, https://images.unsplash.com/photo-1706675780107-7c43cc487928?auto=format&fit=crop&q=75&w=2400 2400w" sizes="100vw" alt="조명이 켜진 밤의 축구 경기장" fetchpriority="high" decoding="async">
+        <div class="container hero-inner">
+          <p class="eyebrow">26/27 Season · Football Kits</p>
+          <h1 id="hero-title" class="hero-title">Wear your colors</h1>
+          <p>프리미어리그 빅6와 라리가 세 구단의 컬러를 담은 홈·어웨이 저지 컬렉션.</p>
+          <div class="hero-cta">
+            <a href="#listing" class="btn btn-light">저지 보기</a>
+            <a href="windbreakers.html" class="btn btn-ghost-light">바람막이 보기</a>
+          </div>
         </div>
+      </div>
+      <div class="hero-slide">
+        <img class="hero-img" src="https://images.unsplash.com/photo-1560272564-c83b66b1ad12?auto=format&fit=crop&q=75&w=1600" srcset="https://images.unsplash.com/photo-1560272564-c83b66b1ad12?auto=format&fit=crop&q=75&w=800 800w, https://images.unsplash.com/photo-1560272564-c83b66b1ad12?auto=format&fit=crop&q=75&w=1600 1600w, https://images.unsplash.com/photo-1560272564-c83b66b1ad12?auto=format&fit=crop&q=75&w=2400 2400w" sizes="100vw" alt="잔디 위에서 공을 차는 선수" loading="lazy" decoding="async">
+        <div class="container hero-inner">
+          <p class="eyebrow">Matchday Sale</p>
+          <h2 class="hero-title">Up to 23% off</h2>
+          <p>맨유·토트넘 저지 시즌 오프 특가. 7만원 이상 무료배송, 30일 무료 반품.</p>
+          <div class="hero-cta">
+            <a href="#listing" class="btn btn-light">세일 상품 보기</a>
+            <a href="#size-guide" class="btn btn-ghost-light">사이즈 가이드</a>
+          </div>
+        </div>
+      </div>
+      <div class="hero-slide">
+        <img class="hero-img" src="https://images.unsplash.com/photo-1663146718443-e643ee509302?auto=format&fit=crop&q=75&w=1600" srcset="https://images.unsplash.com/photo-1663146718443-e643ee509302?auto=format&fit=crop&q=75&w=800 800w, https://images.unsplash.com/photo-1663146718443-e643ee509302?auto=format&fit=crop&q=75&w=1600 1600w, https://images.unsplash.com/photo-1663146718443-e643ee509302?auto=format&fit=crop&q=75&w=2400 2400w" sizes="100vw" alt="바람막이를 입고 달리는 사람" loading="lazy" decoding="async">
+        <div class="container hero-inner">
+          <p class="eyebrow">FW 2026 · Windbreakers</p>
+          <h2 class="hero-title">Beat the wind</h2>
+          <p>훈련장과 관중석, 출퇴근길까지. 가볍게 걸치는 윈드 재킷.</p>
+          <div class="hero-cta">
+            <a href="windbreakers.html" class="btn btn-light">바람막이 보기</a>
+            <a href="#listing" class="btn btn-ghost-light">축구복 보기</a>
+          </div>
+        </div>
+      </div>
+      <div class="container hero-dots-wrap"><div class="hero-dots" role="group" aria-label="배너 선택"></div></div>
+    </section>
+
+    <section class="clubs" aria-labelledby="clubs-title">
+      <div class="container">
+        <div class="section-head">
+          <h2 id="clubs-title">Shop by Club</h2>
+          <p>구단을 고르면 바로 상품을 볼 수 있어요</p>
+        </div>
+        <div class="club-row" id="club-row"></div>
       </div>
     </section>
 
@@ -82,6 +110,7 @@
             <select class="sort-select" id="sort">
               <option value="recommend">추천순</option>
               <option value="new">신상품순</option>
+              <option value="review">리뷰 많은순</option>
               <option value="sale">할인상품순</option>
               <option value="low">낮은 가격순</option>
               <option value="high">높은 가격순</option>
@@ -92,6 +121,33 @@
       </div>
     </section>
 
+    <section class="tiles" aria-label="기획전">
+      <div class="container tile-grid">
+        <a class="tile" href="#listing">
+          <img class="tile-img" src="https://images.unsplash.com/photo-1652190364244-96ad73c21c4c?auto=format&fit=crop&q=75&w=1600" srcset="https://images.unsplash.com/photo-1652190364244-96ad73c21c4c?auto=format&fit=crop&q=75&w=800 800w, https://images.unsplash.com/photo-1652190364244-96ad73c21c4c?auto=format&fit=crop&q=75&w=1600 1600w, https://images.unsplash.com/photo-1652190364244-96ad73c21c4c?auto=format&fit=crop&q=75&w=2400 2400w" sizes="100vw" alt="조명 아래 축구 골대" loading="lazy" decoding="async">
+          <div class="tile-body"><p class="eyebrow">Home &amp; Away</p><h3>26/27 저지 컬렉션</h3><span class="tile-link">지금 보기</span></div>
+        </a>
+        <a class="tile" href="windbreakers.html">
+          <img class="tile-img" src="https://images.unsplash.com/photo-1564099973389-c8ea3ecca772?auto=format&fit=crop&q=75&w=1600" srcset="https://images.unsplash.com/photo-1564099973389-c8ea3ecca772?auto=format&fit=crop&q=75&w=800 800w, https://images.unsplash.com/photo-1564099973389-c8ea3ecca772?auto=format&fit=crop&q=75&w=1600 1600w, https://images.unsplash.com/photo-1564099973389-c8ea3ecca772?auto=format&fit=crop&q=75&w=2400 2400w" sizes="100vw" alt="후드 재킷을 입은 사람" loading="lazy" decoding="async">
+          <div class="tile-body"><p class="eyebrow">Windbreakers</p><h3>바람 부는 날의 필수템</h3><span class="tile-link">바람막이 보기</span></div>
+        </a>
+      </div>
+      <div class="container">
+        <div class="marking" id="size-guide">
+          <img class="marking-img" src="https://images.unsplash.com/photo-1575361204480-aadea25e6e68?auto=format&fit=crop&q=75&w=1600" srcset="https://images.unsplash.com/photo-1575361204480-aadea25e6e68?auto=format&fit=crop&q=75&w=800 800w, https://images.unsplash.com/photo-1575361204480-aadea25e6e68?auto=format&fit=crop&q=75&w=1600 1600w, https://images.unsplash.com/photo-1575361204480-aadea25e6e68?auto=format&fit=crop&q=75&w=2400 2400w" sizes="100vw" alt="잔디 위의 축구공" loading="lazy" decoding="async">
+          <div class="marking-body">
+            <p class="eyebrow">Coming Soon</p>
+            <h3>이름 · 등번호 마킹 서비스</h3>
+            <p>좋아하는 선수의 번호나 내 이름을 새겨 보세요. 마킹 서비스는 준비 중이며, 상품 뒷면 이미지는 예시입니다.</p>
+            <table class="size-table">
+              <caption>저지 사이즈 가이드 (단위: cm)</caption>
+              <thead><tr><th>사이즈</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>XXL</th></tr></thead>
+              <tbody><tr><th>가슴단면</th><td>50</td><td>53</td><td>56</td><td>59</td><td>62</td></tr><tr><th>총장</th><td>70</td><td>72</td><td>74</td><td>76</td><td>78</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
     <section class="feature-band" aria-label="쇼핑 혜택">
       <div class="container feature-grid">
         <div class="feature">
@@ -140,6 +196,7 @@
       <div class="footer-bottom">
         <span>(주)릿지라인 · 대표 홍길동 · 사업자등록번호 000-00-00000 · 통신판매업 0000-서울-0000</span>
         <span>© 2026 RIDGELINE. All rights reserved.</span>
+        <span>Photos: Unsplash</span>
         <span>※ 결제 연동 테스트용 데모 사이트입니다. 축구복은 각 구단의 공식 상품이 아니며 엠블럼·스폰서 로고를 포함하지 않습니다.</span>
       </div>
     </div>

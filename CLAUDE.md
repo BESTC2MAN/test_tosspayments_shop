@@ -34,7 +34,8 @@ powershell -ExecutionPolicy Bypass -File serve.ps1 -Port 3000
 ### 상품 데이터와 이미지
 
 - 상품은 `products.js`의 `PRODUCTS` 배열에 하드코딩되어 있습니다. `sale: 0`이면 할인 없음, `soldOut`은 품절 사이즈 목록, `badge`는 `best`/`new`/`sale`입니다.
-- 실제 이미지 대신 `renderProductArt(product, colorIndex)`가 SVG를 생성합니다. 축구복(`cat: "jersey"`)은 `jerseyArt()`가 `kit()`로 만든 컬러웨이(`body`, `stripe`, `sleeve`, `trim`)로 저지를 그리고, 바람막이는 `topArt(type, hex)`(현재 `shell`만 사용)로 그립니다. 사진으로 바꿀 때는 이 함수만 교체하면 목록, 퀵뷰, 장바구니, 주문 요약에 모두 반영됩니다.
+- 상품 이미지는 사진 대신 `renderProductArt(product, colorIndex, view)`가 SVG로 생성합니다. `view`는 `front`(기본)/`back`/`detail`이고, 목록 카드는 앞·뒤 두 장을 겹쳐 두고 호버하면 뒷면(`.art-back`)이 보이며, 퀵뷰는 세 장을 썸네일 갤러리로 보여줍니다. 축구복(`cat: "jersey"`)은 `jerseyArt()`가 `kit()` 컬러웨이(`body`, `stripe`, `sleeve`, `trim`, `collar` crew/v, `pattern` tonal/pin/hoop, `num` 등번호 색)로 그리고, 바람막이는 `windbreakerArt()`가 `type`(track/anorak/packable/shell)별로 후드·지퍼·포켓·요크를 다르게 그립니다. 사진으로 바꿀 때는 이 함수만 교체하면 목록, 퀵뷰, 장바구니, 주문 요약에 모두 반영됩니다.
+- 히어로 슬라이더, 기획전 타일, 마킹 배너의 사진은 Unsplash(`images.unsplash.com`) 핫링크입니다. 실제 구단·경기장·스폰서 로고나 문구가 잘 보이는 사진은 쓰지 않습니다. 슬라이더는 `app.js`의 `initHero()`, 구단 바로가기(`#club-row`, `club`/`clubShort` 필드)는 `initClubs()`가 그립니다.
 - 축구복의 색상 옵션은 홈/어웨이 컬러웨이입니다. 줄무늬 저지는 `kit()`가 만든 `swatch`(그라디언트)를 색상 칩 배경으로 씁니다(`app.js`는 `c.swatch || c.hex`).
 - 축구복에는 실제 구단명(프리미어리그 빅6, 아틀레티코, 레알, 바르샤)을 상품명으로만 씁니다. 구단 엠블럼, 스폰서·용품사 로고, "공식/레플리카" 같은 표현은 쓰지 않고, 비공식 데모 상품이라는 안내(`NOTE`, 푸터 문구)를 유지합니다. 바람막이와 상점 브랜드는 가상 브랜드이며, 실제 스포츠·아웃도어 브랜드의 이름, 로고, 제품 라인명은 쓰지 않습니다.
 - `jerseyArt()`는 `clipPath`를 쓰므로 한 페이지에 여러 장을 그릴 때 id가 겹치지 않도록 `artSeq`로 매번 새 id를 만듭니다.

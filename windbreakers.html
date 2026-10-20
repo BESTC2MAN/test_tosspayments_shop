@@ -44,27 +44,43 @@
   </header>
 
   <main>
-    <section class="hero" aria-labelledby="hero-title">
-      <svg class="hero-bg" viewBox="0 0 1440 520" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-        <defs>
-          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d2a3a"/><stop offset="1" stop-color="#4a5b6e"/></linearGradient>
-          <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".75"/><stop offset=".6" stop-color="#000" stop-opacity=".1"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient>
-        </defs>
-        <rect width="1440" height="520" fill="url(#sky)"/>
-        <g stroke="#9fb3c8" stroke-width="3" stroke-linecap="round" opacity=".35" fill="none"><path d="M620 120q180-30 360 0"/><path d="M700 170q200-30 420 0"/><path d="M560 230q160-24 320 0"/></g>
-        <path d="M0 430l360-60 300 40 320-70 460 60V520H0z" fill="#2c3846"/>
-        <path d="M0 480l420-40 380 30 640-30V520H0z" fill="#161d26"/>
-        <rect width="1440" height="520" fill="url(#fade)"/>
-      </svg>
-      <div class="container hero-inner">
-        <p class="eyebrow">FW 2026 · Windbreakers</p>
-        <h1 id="hero-title">Beat the wind</h1>
-        <p>훈련장과 관중석, 출퇴근길까지. 바람과 비를 막아주는 가벼운 윈드 재킷.</p>
-        <div class="hero-cta">
-          <a href="#listing" class="btn btn-light">바람막이 보기</a>
-          <a href="jerseys.html" class="btn btn-ghost-light">축구복 보러가기</a>
+    <section class="hero hero-slider" aria-labelledby="hero-title" aria-roledescription="carousel">
+      <div class="hero-slide is-active">
+        <img class="hero-img" src="https://images.unsplash.com/photo-1663146718443-e643ee509302?auto=format&fit=crop&q=75&w=1600" srcset="https://images.unsplash.com/photo-1663146718443-e643ee509302?auto=format&fit=crop&q=75&w=800 800w, https://images.unsplash.com/photo-1663146718443-e643ee509302?auto=format&fit=crop&q=75&w=1600 1600w, https://images.unsplash.com/photo-1663146718443-e643ee509302?auto=format&fit=crop&q=75&w=2400 2400w" sizes="100vw" alt="바람막이를 입고 달리는 사람" fetchpriority="high" decoding="async">
+        <div class="container hero-inner">
+          <p class="eyebrow">FW 2026 · Windbreakers</p>
+          <h1 id="hero-title" class="hero-title">Beat the wind</h1>
+          <p>훈련장과 관중석, 출퇴근길까지. 가볍게 걸치는 윈드 재킷.</p>
+          <div class="hero-cta">
+            <a href="#listing" class="btn btn-light">바람막이 보기</a>
+            <a href="jerseys.html" class="btn btn-ghost-light">축구복 보기</a>
+          </div>
         </div>
       </div>
+      <div class="hero-slide">
+        <img class="hero-img" src="https://images.unsplash.com/photo-1633965288332-cba23d7e157d?auto=format&fit=crop&q=75&w=1600" srcset="https://images.unsplash.com/photo-1633965288332-cba23d7e157d?auto=format&fit=crop&q=75&w=800 800w, https://images.unsplash.com/photo-1633965288332-cba23d7e157d?auto=format&fit=crop&q=75&w=1600 1600w, https://images.unsplash.com/photo-1633965288332-cba23d7e157d?auto=format&fit=crop&q=75&w=2400 2400w" sizes="100vw" alt="숲속에서 파란 재킷을 입은 사람" loading="lazy" decoding="async">
+        <div class="container hero-inner">
+          <p class="eyebrow">Anorak Sale</p>
+          <h2 class="hero-title">Light &amp; Packable</h2>
+          <p>하프집 아노락과 패커블 재킷 최대 22% 할인. 가방에 쏙 들어가는 150g대 경량 바람막이.</p>
+          <div class="hero-cta">
+            <a href="#listing" class="btn btn-light">세일 상품 보기</a>
+            <a href="jerseys.html" class="btn btn-ghost-light">축구복 보기</a>
+          </div>
+        </div>
+      </div>      <div class="hero-slide">
+        <img class="hero-img" src="https://images.unsplash.com/photo-1706675780107-7c43cc487928?auto=format&fit=crop&q=75&w=1600" srcset="https://images.unsplash.com/photo-1706675780107-7c43cc487928?auto=format&fit=crop&q=75&w=800 800w, https://images.unsplash.com/photo-1706675780107-7c43cc487928?auto=format&fit=crop&q=75&w=1600 1600w, https://images.unsplash.com/photo-1706675780107-7c43cc487928?auto=format&fit=crop&q=75&w=2400 2400w" sizes="100vw" alt="조명이 켜진 밤의 축구 경기장" loading="lazy" decoding="async">
+        <div class="container hero-inner">
+          <p class="eyebrow">26/27 Season · Football Kits</p>
+          <h2 class="hero-title">Wear your colors</h2>
+          <p>프리미어리그 빅6와 라리가 세 구단의 컬러를 담은 홈·어웨이 저지 컬렉션.</p>
+          <div class="hero-cta">
+            <a href="jerseys.html" class="btn btn-light">저지 보기</a>
+            <a href="#listing" class="btn btn-ghost-light">바람막이 보기</a>
+          </div>
+        </div>
+      </div>
+      <div class="container hero-dots-wrap"><div class="hero-dots" role="group" aria-label="배너 선택"></div></div>
     </section>
 
     <div class="cat-strip">
@@ -83,6 +99,7 @@
             <select class="sort-select" id="sort">
               <option value="recommend">추천순</option>
               <option value="new">신상품순</option>
+              <option value="review">리뷰 많은순</option>
               <option value="sale">할인상품순</option>
               <option value="low">낮은 가격순</option>
               <option value="high">높은 가격순</option>
@@ -93,6 +110,18 @@
       </div>
     </section>
 
+    <section class="tiles" aria-label="기획전">
+      <div class="container tile-grid">
+        <a class="tile" href="jerseys.html">
+          <img class="tile-img" src="https://images.unsplash.com/photo-1652190364244-96ad73c21c4c?auto=format&fit=crop&q=75&w=1600" srcset="https://images.unsplash.com/photo-1652190364244-96ad73c21c4c?auto=format&fit=crop&q=75&w=800 800w, https://images.unsplash.com/photo-1652190364244-96ad73c21c4c?auto=format&fit=crop&q=75&w=1600 1600w, https://images.unsplash.com/photo-1652190364244-96ad73c21c4c?auto=format&fit=crop&q=75&w=2400 2400w" sizes="100vw" alt="조명 아래 축구 골대" loading="lazy" decoding="async">
+          <div class="tile-body"><p class="eyebrow">Home &amp; Away</p><h3>26/27 저지 컬렉션</h3><span class="tile-link">지금 보기</span></div>
+        </a>
+        <a class="tile" href="#listing">
+          <img class="tile-img" src="https://images.unsplash.com/photo-1564099973389-c8ea3ecca772?auto=format&fit=crop&q=75&w=1600" srcset="https://images.unsplash.com/photo-1564099973389-c8ea3ecca772?auto=format&fit=crop&q=75&w=800 800w, https://images.unsplash.com/photo-1564099973389-c8ea3ecca772?auto=format&fit=crop&q=75&w=1600 1600w, https://images.unsplash.com/photo-1564099973389-c8ea3ecca772?auto=format&fit=crop&q=75&w=2400 2400w" sizes="100vw" alt="후드 재킷을 입은 사람" loading="lazy" decoding="async">
+          <div class="tile-body"><p class="eyebrow">Windbreakers</p><h3>바람 부는 날의 필수템</h3><span class="tile-link">바람막이 보기</span></div>
+        </a>
+      </div>
+    </section>
     <section class="feature-band" aria-label="쇼핑 혜택">
       <div class="container feature-grid">
         <div class="feature">
@@ -141,6 +170,7 @@
       <div class="footer-bottom">
         <span>(주)릿지라인 · 대표 홍길동 · 사업자등록번호 000-00-00000 · 통신판매업 0000-서울-0000</span>
         <span>© 2026 RIDGELINE. All rights reserved.</span>
+        <span>Photos: Unsplash</span>
         <span>※ 결제 연동 테스트용 데모 사이트입니다. 축구복은 각 구단의 공식 상품이 아니며 엠블럼·스폰서 로고를 포함하지 않습니다.</span>
       </div>
     </div>
