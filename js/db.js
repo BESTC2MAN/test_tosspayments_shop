@@ -23,6 +23,7 @@
       ok: false,
       code: known ? code : "SERVER_ERROR",
       message: (error && error.hint) || fallback || "잠시 후 다시 시도해 주세요.",
+      raw: (error && error.message) || "",   // 로그인 오류 문구 구분용
     };
   }
   async function call(promise, fallback) {

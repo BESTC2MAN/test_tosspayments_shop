@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>마이페이지 | RIDGELINE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header checkout-header">
+    <div class="container header-inner">
+      <a href="jerseys.html" class="logo" aria-label="RIDGELINE 홈">
+        <svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" fill="#111"/><path d="M6 31L17 12l6 10 4-6 7 15z" fill="#fff"/><path d="M17 12l3 5-3-1-2 2z" fill="#111"/></svg>
+        Ridgeline
+      </a>
+      <div class="header-actions">
+        <a class="icon-btn" href="jerseys.html" aria-label="쇼핑하러 가기">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8h14l-1 13H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        </a>
+        <a class="icon-btn account-link" href="account.html" aria-label="마이페이지">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container page-mid">
+      <h1>My Page</h1>
+      <p class="page-lead"><span id="hello">&nbsp;</span> · <button type="button" id="logout" style="text-decoration:underline">로그아웃</button>
+        <a href="admin.html" id="admin-link" hidden style="margin-left:8px;text-decoration:underline">관리자 페이지</a></p>
+
+      <div class="tabs" role="tablist">
+        <button role="tab" data-tab="orders" aria-selected="true">주문 내역</button>
+        <button role="tab" data-tab="wishlist" aria-selected="false">찜한 상품</button>
+        <button role="tab" data-tab="addresses" aria-selected="false">배송지</button>
+        <button role="tab" data-tab="profile" aria-selected="false">회원 정보</button>
+      </div>
+
+      <section id="tab-orders" role="tabpanel"><div id="orders-list"><p class="empty-box">불러오는 중…</p></div></section>
+
+      <section id="tab-wishlist" role="tabpanel" hidden><div id="wish-list"></div></section>
+
+      <section id="tab-addresses" role="tabpanel" hidden>
+        <div id="address-list"></div>
+        <button class="btn btn-outline" type="button" id="add-address">배송지 추가</button>
+      </section>
+
+      <section id="tab-profile" role="tabpanel" hidden>
+        <form class="form-grid" id="profile-form" novalidate>
+          <div class="field"><label for="pf-name">이름</label><input id="pf-name" name="name" autocomplete="name"></div>
+          <div class="field"><label for="pf-phone">휴대폰 번호</label><input id="pf-phone" name="phone" inputmode="numeric" placeholder="01012345678"></div>
+          <div class="field full"><label for="pf-email">이메일 (로그인 아이디)</label><input id="pf-email" name="email" readonly></div>
+          <div class="full"><button class="btn btn-primary" type="submit">저장</button><p class="form-msg"></p></div>
+        </form>
+        <h2 class="section-title" style="margin-top:36px">비밀번호 변경</h2>
+        <form class="form-grid" id="password-form" novalidate>
+          <div class="field"><label for="pw-new">새 비밀번호 (8자 이상)</label><input id="pw-new" name="password" type="password" autocomplete="new-password"></div>
+          <div class="field"><label for="pw-new2">새 비밀번호 확인</label><input id="pw-new2" name="password2" type="password" autocomplete="new-password"></div>
+          <div class="full"><button class="btn btn-outline" type="submit">비밀번호 변경</button><p class="form-msg"></p></div>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <dialog class="sheet" id="address-dialog"></dialog>
+  <dialog class="sheet" id="review-dialog"></dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/member.js"></script>
+  <script src="js/order-view.js"></script>
+  <script src="js/account.js"></script>
+</body>
+</html>

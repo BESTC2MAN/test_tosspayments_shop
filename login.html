@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>로그인 | RIDGELINE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header checkout-header">
+    <div class="container header-inner">
+      <a href="jerseys.html" class="logo" aria-label="RIDGELINE 홈">
+        <svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" fill="#111"/><path d="M6 31L17 12l6 10 4-6 7 15z" fill="#fff"/><path d="M17 12l3 5-3-1-2 2z" fill="#111"/></svg>
+        Ridgeline
+      </a>
+      <div class="header-actions">
+        <a class="icon-btn" href="jerseys.html" aria-label="쇼핑하러 가기">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8h14l-1 13H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container page-narrow">
+
+      <!-- 로그인 -->
+      <section data-mode="login">
+        <h1>Log in</h1>
+        <p class="page-lead">로그인하면 주문 내역, 배송지, 찜한 상품을 어느 기기에서나 볼 수 있어요.</p>
+        <form class="form-stack" id="login-form" novalidate>
+          <div class="field"><label for="li-email">이메일</label><input id="li-email" name="email" type="email" autocomplete="email" required></div>
+          <div class="field"><label for="li-pw">비밀번호</label><input id="li-pw" name="password" type="password" autocomplete="current-password" required></div>
+          <button class="btn btn-primary btn-block" type="submit">로그인</button>
+          <p class="form-msg" aria-live="polite"></p>
+        </form>
+        <div class="or-line">또는</div>
+        <div class="social-btns">
+          <button class="btn btn-kakao btn-block" type="button" data-provider="kakao">카카오로 계속하기</button>
+          <button class="btn btn-google btn-block" type="button" data-provider="google">Google로 계속하기</button>
+        </div>
+        <div class="link-row"><a href="#signup" data-go="signup">회원가입</a><a href="#reset" data-go="reset">비밀번호 찾기</a></div>
+        <div class="link-row"><span>비회원으로 주문하셨나요?</span><a href="orders.html">비회원 주문 조회</a></div>
+      </section>
+
+      <!-- 회원가입 -->
+      <section data-mode="signup" hidden>
+        <h1>Sign up</h1>
+        <p class="page-lead">이메일로 가입하면 인증 메일이 발송됩니다. 메일의 링크를 누르면 가입이 완료돼요.</p>
+        <form class="form-stack" id="signup-form" novalidate>
+          <div class="field"><label for="su-name">이름</label><input id="su-name" name="name" autocomplete="name" required></div>
+          <div class="field"><label for="su-email">이메일</label><input id="su-email" name="email" type="email" autocomplete="email" required></div>
+          <div class="field"><label for="su-pw">비밀번호 (8자 이상)</label><input id="su-pw" name="password" type="password" autocomplete="new-password" minlength="8" required></div>
+          <label class="check-row"><input type="checkbox" name="agree" required> <span><a href="privacy.html" target="_blank" style="text-decoration:underline">개인정보 처리방침</a>에 동의합니다 (필수)</span></label>
+          <button class="btn btn-primary btn-block" type="submit">가입하기</button>
+          <p class="form-msg" aria-live="polite"></p>
+        </form>
+        <div class="link-row"><span>이미 회원이신가요?</span><a href="#login" data-go="login">로그인</a></div>
+      </section>
+
+      <!-- 비밀번호 찾기 -->
+      <section data-mode="reset" hidden>
+        <h1>Reset</h1>
+        <p class="page-lead">가입한 이메일을 입력하면 비밀번호 재설정 링크를 보내드려요.</p>
+        <form class="form-stack" id="reset-form" novalidate>
+          <div class="field"><label for="rs-email">이메일</label><input id="rs-email" name="email" type="email" autocomplete="email" required></div>
+          <button class="btn btn-primary btn-block" type="submit">재설정 메일 보내기</button>
+          <p class="form-msg" aria-live="polite"></p>
+        </form>
+        <div class="link-row"><a href="#login" data-go="login">로그인으로 돌아가기</a></div>
+      </section>
+
+      <!-- 새 비밀번호 (재설정 메일 링크로 들어옴) -->
+      <section data-mode="update" hidden>
+        <h1>New password</h1>
+        <p class="page-lead">새 비밀번호를 입력해 주세요.</p>
+        <form class="form-stack" id="update-form" novalidate>
+          <div class="field"><label for="up-pw">새 비밀번호 (8자 이상)</label><input id="up-pw" name="password" type="password" autocomplete="new-password" minlength="8" required></div>
+          <button class="btn btn-primary btn-block" type="submit">비밀번호 변경</button>
+          <p class="form-msg" aria-live="polite"></p>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/member.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>

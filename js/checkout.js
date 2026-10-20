@@ -42,6 +42,11 @@
 
     renderSummary();
     initCoupon();
+    // 로그인 회원의 장바구니가 다른 기기 내용과 합쳐지면 금액을 다시 계산
+    document.addEventListener("cart:change", function () {
+      if (!Shop.Cart.items().length) { location.reload(); return; }
+      applyAmount();
+    });
     if (window.ShopMember) window.ShopMember.fillCheckout($("#order-form").elements);
     initPaymentWidget().catch(function (err) {
       console.error(err);
