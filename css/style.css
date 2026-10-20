@@ -1070,3 +1070,14 @@ dialog.sheet::backdrop { background: rgba(0, 0, 0, .45); }
 
 /* hidden 속성이 display 지정보다 우선하도록 */
 [hidden] { display: none !important; }
+
+/* 찜 하트는 상품 이미지용 svg 규칙(전체 채우기·확대)을 받지 않도록 */
+.product-media .wish-btn svg, .qv-media .wish-btn svg {
+  position: static; inset: auto; width: 20px; height: 20px; transform: none !important; opacity: 1 !important; transition: none;
+}
+.legal h2 { font-size: 17px; font-weight: 700; margin: 28px 0 8px; }
+.legal p, .legal li { font-size: 14px; color: var(--gray-700); line-height: 1.8; }
+.legal ul { padding-left: 18px; }
+.legal table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+.legal th, .legal td { border: 1px solid var(--gray-200); padding: 8px; text-align: left; vertical-align: top; }
+.legal th { background: var(--gray-100); }

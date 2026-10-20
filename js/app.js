@@ -235,6 +235,71 @@
     });
   }
 
+  /* ---------- 찜 (F-10) ---------- */
+  const HEART = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.5-9.2C1.2 8.6 3.3 5 6.8 5c2 0 3.6 1.1 5.2 3 1.6-1.9 3.2-3 5.2-3 3.5 0 5.6 3.6 4.3 6.8C19.5 16.4 12 21 12 21z"/></svg>';
+  const Wish = {
+    ids: {},
+    load: async function () {
+      if (!global.ShopDB || !(await global.ShopDB.session())) return;
+      const r = await global.ShopDB.wishlist();
+      if (r.ok) r.data.forEach(function (w) { Wish.ids[w.product_id] = true; });
+      Wish.paint();
+    },
+    paint: function () {
+      $$("[data-wish]").forEach(function (b) {
+        const on = !!Wish.ids[b.dataset.wish];
+        b.setAttribute("aria-pressed", String(on));
+        b.setAttribute("aria-label", on ? "찜 해제" : "찜하기");
+      });
+    },
+    toggle: async function (id) {
+      if (!(await global.ShopDB.session())) {
+        toast("로그인하면 찜할 수 있어요.");
+        const here = location.pathname.split("/").pop() || "jerseys.html";
+        setTimeout(function () { location.href = "login.html?next=" + encodeURIComponent(here); }, 900);
+        return;
+      }
+      const on = !Wish.ids[id];
+      if (on) Wish.ids[id] = true; else delete Wish.ids[id];
+      Wish.paint();
+      const r = on ? await global.ShopDB.addWish(id) : await global.ShopDB.removeWish(id);
+      if (!r.ok) {
+        if (on) delete Wish.ids[id]; else Wish.ids[id] = true;
+        Wish.paint();
+        toast(r.message);
+        return;
+      }
+      toast(on ? "찜했어요. 마이페이지에서 모아 볼 수 있어요." : "찜을 해제했어요.");
+    },
+  };
+  function wishBtn(p) {
+    return '<button type="button" class="wish-btn" data-wish="' + esc(p.id) + '" aria-pressed="' + !!Wish.ids[p.id] + '" aria-label="찜하기">' + HEART + "</button>";
+  }
+  document.addEventListener("click", function (e) {
+    const b = e.target.closest && e.target.closest("[data-wish]");
+    if (!b) return;
+    e.preventDefault();
+    e.stopPropagation();
+    Wish.toggle(b.dataset.wish);
+  }, true);
+
+  /* ---------- 리뷰 (F-11) ---------- */
+  async function loadQvReviews(p) {
+    const box = $("#qv-reviews");
+    if (!box || !global.ShopDB) return;
+    const r = await global.ShopDB.reviews(p.id);
+    if (qvState.product !== p) return;   // 그 사이 다른 상품을 열었으면 무시
+    const head = "<h3>리뷰 " + p.reviews.toLocaleString("ko-KR") + (p.rating ? ratingHTML(p) : "") + "</h3>";
+    if (!r.ok) { box.innerHTML = head + '<p class="muted">리뷰를 불러오지 못했습니다.</p>'; return; }
+    if (!r.data.length) { box.innerHTML = head + '<p class="muted">아직 리뷰가 없어요. 구매 후 마이페이지에서 첫 리뷰를 남겨 주세요.</p>'; return; }
+    box.innerHTML = head + r.data.map(function (rv) {
+      const d = new Date(rv.created_at);
+      return '<div class="review"><div class="review-head"><span class="stars" style="--r:' + rv.rating + '" aria-label="별점 ' + rv.rating + '점"></span>' +
+        "<span>" + esc(rv.author_name) + "</span><span>" + d.getFullYear() + "." + (d.getMonth() + 1) + "." + d.getDate() + "</span>" +
+        (rv.color ? "<span>" + esc(rv.color + " / " + rv.size) + "</span>" : "") + "</div><p>" + esc(rv.content) + "</p></div>";
+    }).join("");
+  }
+
   function stockNote(it) {
     if (it.stock === 0) return '<p class="stock-note is-out">품절된 옵션입니다. 삭제 후 주문해 주세요.</p>';
     if (it.qty > it.stock) return '<p class="stock-note is-out">재고가 ' + it.stock + "개 남아 있습니다. 수량을 줄여 주세요.</p>";
@@ -267,7 +332,7 @@
 
     $(".qv-content", modal).innerHTML =
       '<div class="qv">' +
-        '<div class="qv-media">' + badgeHTML(p) + '<div class="qv-art"></div><div class="qv-thumbs"></div></div>' +
+        '<div class="qv-media">' + badgeHTML(p) + wishBtn(p) + '<div class="qv-art"></div><div class="qv-thumbs"></div></div>' +
         '<div class="qv-body">' +
           '<p class="qv-cat">' + cat.en + " · " + esc(p.sub) + "</p>" +
           '<h2 class="qv-name" id="qv-title">' + esc(p.name) + "</h2>" +
@@ -292,11 +357,13 @@
             '<button class="btn btn-outline btn-block" data-qv-add>장바구니 담기</button>' +
             '<button class="btn btn-primary btn-block" data-qv-buy>바로 구매</button>' +
           "</div>" +
+          '<div class="reviews" id="qv-reviews"><p class="muted">리뷰 불러오는 중…</p></div>' +
         "</div>" +
       "</div>";
 
     drawQvMedia(modal);
     drawQvSizes(modal);
+    loadQvReviews(p);
     $$(".color-opt", modal).forEach(function (b) {
       b.addEventListener("click", function () {
         qvState.color = Number(b.dataset.color);
@@ -426,7 +493,7 @@
 
       grid.innerHTML = list.map(function (p) {
         return '<article class="product-card" data-id="' + p.id + '" tabindex="0" aria-label="' + esc(p.name) + '">' +
-          '<div class="product-media">' + badgeHTML(p) + Shop.renderProductArt(p, 0) + Shop.renderProductArt(p, 0, "back") +
+          '<div class="product-media">' + badgeHTML(p) + wishBtn(p) + Shop.renderProductArt(p, 0) + Shop.renderProductArt(p, 0, "back") +
             '<button class="quick-add" data-quick>빠른 구매</button>' +
           "</div>" +
           '<div class="product-info">' +
@@ -442,10 +509,13 @@
       $$(".product-card", grid).forEach(function (card) {
         const open = function () { openQuickView(card.dataset.id); };
         card.addEventListener("click", open);
-        card.addEventListener("keydown", function (e) { if (e.key === "Enter") open(); });
+        card.addEventListener("keydown", function (e) { if (e.key === "Enter" && e.target === card) open(); });
       });
     }
     draw();
+    // 마이페이지 찜 목록 등에서 jerseys.html#p=상품ID 로 들어오면 퀵뷰를 바로 엽니다
+    const m = location.hash.match(/^#p=([A-Z0-9-]+)$/);
+    if (m && Shop.findProduct(m[1])) openQuickView(m[1]);
   }
 
   /* ---------- hero slider ---------- */
@@ -491,6 +561,7 @@
     initHeader();
     initClubs();
     initListing();
+    if (document.querySelector("#product-grid")) Wish.load();
   });
 
   global.Shop.Cart = Cart;
